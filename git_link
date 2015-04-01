@@ -1,0 +1,6 @@
+git remote add origin git://github.com/andrew0snake/4.git
+git pull git@github.com:andrew0snake/4.git master
+git push git@github.com:andrew0snake/4.git master
+
+https://github.com/andrew0snake/4.git
+
