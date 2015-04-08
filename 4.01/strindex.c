@@ -3,6 +3,7 @@
 
 int getline ( char line [], int max );
 int strindex ( char source [], char searchfor [] );
+int strindex_2 ( char source [], char searchfor [] );
 
 char pattern [] = "ould";
 
@@ -68,6 +69,23 @@ int strindex ( char s [], char t [] )
     
     return -1;
 
+}
 
+int strindex_2 ( char s [], char t [] )
 
+{
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int len_t = 0;
+        
+    for ( i = 0; s [ i ] != '\0'; i++ ){
+        len_t = 0;
+        for ( j = i, k = 0; t [ k ] != '\0' && s [ j ] == t [ k ]; j++, k++ )
+            len_t++;
+        if ( ( k > 0 ) && t [ k ] == '\0' )
+            return ( i + len_t );
+    };
+    
+    return -1;
 }
