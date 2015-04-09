@@ -2,7 +2,7 @@
 #define MAXLINE 1000
 
 int getline ( char line [], int max );
-int strindex ( char source [], char searchfor [] );
+int strindex_1 ( char source [], char searchfor [] );
 int strindex_2 ( char source [], char searchfor [] );
 
 char pattern [] = "ould";
@@ -15,8 +15,10 @@ int main ()
     int found = 0;
     
     while ( getline ( line, MAXLINE ) > 0 ){
-        if ( strindex ( line, pattern ) >= 0 ){
+        if ( strindex_2 ( line, pattern ) >= 0 ){
             printf ( "%s", line );
+            printf ( "---Using function 1 found that pattern is in position = %3d;---\n", strindex_1 ( line, pattern ) );
+            printf ( "---Using function 2 found that pattern is in position = %3d;---\n", strindex_2 ( line, pattern ) );
             found ++;
         };
     };
@@ -46,7 +48,7 @@ int getline ( char s [], int lim )
 }
 
 
-int strindex ( char s [], char t [] )
+int strindex_1 ( char s [], char t [] )
 
 {
     int i = 0;
