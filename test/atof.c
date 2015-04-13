@@ -5,6 +5,8 @@
 
 void getline_my ( char line [], int size );
 double atof ( char s [] );
+void clear_line ( char line [] );
+int atoi ( char s [] );
 
 void main ()
 
@@ -18,7 +20,10 @@ void main ()
     getline_my ( line, MAX_LINE );
     digit = atof ( line );
     
-    printf ( "Getted from line = %s digit = %G;\n", line, digit );
+    printf ( "Getted from line = %s digit if double = %G;\n", line, digit );
+
+    
+    printf ( "Getted from line = %s digit if double = %G;\n", line, digit );
 
 }
 
@@ -68,3 +73,25 @@ void getline_my ( char line [], int size )
 //        printf ( "line[%d] = %c; i = %d;\n", i, line[i], i );
     };
 }
+
+void clear_line ( char line [] )
+
+{
+    int i = 0;
+    
+    for ( i = 0; line [ i ] != '\0'; i++ ){
+        line [ i ] = 0;
+    };
+
+}
+
+int atoi ( char line [] )
+
+{
+
+    double atof ( char line [] );
+    return ( int ) atof ( line );
+    
+}
+
+

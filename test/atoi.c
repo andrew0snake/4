@@ -3,27 +3,41 @@
 
 #define MAX_LINE 1000
 
-//void getline_my ( char line [], int size );
-//double atof ( char s [] );
-void clean_line ( char line [] );
+void getline_my ( char line [], int size );
+double atof ( char s [] );
+void clear_line ( char line [] );
+int atoi ( char s [] );
 
 void main ()
 
 {
 
-    char line [ MAX_LINE ];
+    char line [ MAX_LINE];
     int i = 0;
-    int getline_my ( char line [], int max );
+    int digit_i = 0;
     double digit = 0.0;
-    double sum = 0.0;
-    double atof ( char [] );
+
+    printf ( "Input please line to convert:" );
+    getline_my ( line, MAX_LINE );
+    digit = atof ( line );
     
-    sum = 0.0;
-    while ( getline_my ( line, MAX_LINE ) > 0 )
-        printf ( "\t%g\n", sum += atof ( line ) );
-    
+    printf ( "Getted from line = %s digit in double = %G;\n", line, digit );
+
+    digit_i = atoi ( line );
+    printf ( "Getted from line = %s digit in integer = %d;\n", line, digit_i );
 
 }
+
+
+int atoi ( char line [] )
+
+{
+
+    double atof ( char line [] );
+    return ( int ) atof ( line );
+    
+}
+
 
 
 double atof ( char s [] )
@@ -60,33 +74,28 @@ double atof ( char s [] )
 }
 
 
-int getline_my ( char line [], int size )
+void getline_my ( char line [], int size )
 
 {
     int i = 0;
     int c = 0;
 
-    clear_line ( line );
-
     for ( i = 0; ( ( c = getchar () ) != EOF ) && c != '\n'; ++i ){
         line [ i ] = c;
 //        printf ( "line[%d] = %c; i = %d;\n", i, line[i], i );
     };
-    
-//    printf ( "getted string = %s;\n", line );
-
 }
-
 
 void clear_line ( char line [] )
 
 {
-
     int i = 0;
     
     for ( i = 0; line [ i ] != '\0'; i++ ){
-        line [ i ] = 0;    
-    }
-
+        line [ i ] = 0;
+    };
 
 }
+
+
+
