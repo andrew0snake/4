@@ -35,6 +35,8 @@ double atof ( char s [] )
     double rez = 0.0;
     int i = 0;
     short int sign = 0;
+    short int seq_sign = 0;
+    char seq [ 20 ];
     
     for ( i = 0; isspace ( s [ i ] ); i++ )
         ;
@@ -58,7 +60,23 @@ double atof ( char s [] )
     
     rez = sign * val / power;
 
-    if ( ( s [ i ] == 'e' ) || ( s [ i ] == 'E') )
+    if ( ( s [ i ] == 'e' ) || ( s [ i ] == 'E') ){
+        i++;
+
+        for ( i = 0; isspace ( s [ i ] ); i++ )
+            ;
+
+        seq_sign = ( s [ i ] == '-' ) ? ( - 1 ) : ( 1 );
+        if ( ( seq_sign == '-' ) || ( seq_sign == '+' ) )
+            i++;
+        
+        clear_line ( seq );
+        for ( power = 1.0; isdigit [ s [ i ] ]; i++ ){
+            
+
+        }
+
+    }
         
 
 
