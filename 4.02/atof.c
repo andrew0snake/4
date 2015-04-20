@@ -33,6 +33,7 @@ double atof ( char s [] )
     double val = 0.0;
     double power = 0.0;
     double rez = 0.0;
+    double seq_rez = 0.0;
     int i = 0;
     short int sign = 0;
     short int seq_sign = 0;
@@ -71,15 +72,17 @@ double atof ( char s [] )
             i++;
         
         clear_line ( seq );
-        for ( power = 1.0; isdigit [ s [ i ] ]; i++ ){
-            
-
-        }
-
-    }
         
-
-
+        for ( power = 1.0; isdigit ( s [ i ] ); i++ ){
+            seq_rez = 10.0 * seq_rez + ( s [ i ] - '0' );
+            power *= 10;
+        };
+        
+        if ( seq_sign == '+' )
+            rez = rez * ( 10 * seq_rez );
+        else 
+            rez = rez / ( 10 * seq_rez );
+    }
 //    return ( sign * val / power );
     return rez;
 
