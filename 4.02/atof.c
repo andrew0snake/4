@@ -35,6 +35,7 @@ double atof ( char s [] )
     double rez = 0.0;
     double seq_rez = 0.0;
     int i = 0;
+    int j = 0;
     short int sign = 0;
     short int seq_sign = 0;
     char seq [ 20 ];
@@ -60,13 +61,14 @@ double atof ( char s [] )
     }
     
     rez = sign * val / power;
+    printf ( "rez = %G;\n", rez );
 
     if ( ( s [ i ] == 'e' ) || ( s [ i ] == 'E') ){
         i++;
 
-        for ( i = 0; isspace ( s [ i ] ); i++ )
+        for ( j = i; isspace ( s [ j ] ); j++ )
             ;
-
+        i = j;
         seq_sign = ( s [ i ] == '-' ) ? ( - 1 ) : ( 1 );
         if ( ( seq_sign == '-' ) || ( seq_sign == '+' ) )
             i++;
@@ -74,9 +76,12 @@ double atof ( char s [] )
         clear_line ( seq );
         
         for ( power = 1.0; isdigit ( s [ i ] ); i++ ){
+            printf ( "power = %G; s [ i = %d ] = %c;\n", power, i, s [ i ] );
             seq_rez = 10.0 * seq_rez + ( s [ i ] - '0' );
             power *= 10;
         };
+        
+        printf ( "seq_rez = %G; seq_sign = %d;\n", seq_rez, seq_sign );
         
         if ( seq_sign == '+' )
             rez = rez * ( 10 * seq_rez );
