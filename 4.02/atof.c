@@ -5,7 +5,8 @@
 
 void getline_my ( char line [], int size );
 double atof ( char s [] );
-void clear_line ( char line [] );
+void clear_line ( char line [], int size );
+double step ( double number, double step_d );
 
 void main ()
 
@@ -16,11 +17,12 @@ void main ()
     int digit_i = 0;
     double digit = 0.0;
 
-    printf ( "Input please line to convert:" );
+    printf ( "\nInput please line to convert:" );
+    clear_line ( line, MAX_LINE );
     getline_my ( line, MAX_LINE );
     digit = atof ( line );
     
-    printf ( "Getted from line = %s digit in double = %G;\n", line, digit );
+    printf ( "Getted from line = %s;\ndigit in double = %f;\n", line, digit );
 
 
 }
@@ -61,19 +63,29 @@ double atof ( char s [] )
     }
     
     rez = sign * val / power;
-    printf ( "rez = %G;\n", rez );
+    printf ( "rez = %G;\n\n", rez );
 
+    if ( ( s [ i ] == '+' ) || ( s [ i ] == '-') ){
+        seq_sign = ( s [ i ] == '-') ? ( - 1 ) : ( 1 );
+        printf ( "s [ i = %d ] = %c; seq_sign = %d\n", i, s [ i ], seq_sign );
+        i++;
+    };
+    
     if ( ( s [ i ] == 'e' ) || ( s [ i ] == 'E') ){
         i++;
+        if ( seq_sign != ( -1 ) )
+            seq_sign = 1;
 
-        for ( j = i; isspace ( s [ j ] ); j++ )
-            ;
-        i = j;
-        seq_sign = ( s [ i ] == '-' ) ? ( - 1 ) : ( 1 );
-        if ( ( seq_sign == '-' ) || ( seq_sign == '+' ) )
-            i++;
+//            for ( j = i; isspace ( s [ j ] ); j++ )
+//                ;
+//            i = j;
+//        printf ( "before check s [ i = %d ] = %c;\n", i, s [ i ] );
+//        seq_sign = ( s [ i ] == '-' ) ? ( - 1 ) : ( 1 );
+//        printf ( "after check seq_sign = %d;\n", seq_sign );
+//        if ( ( seq_sign == '-' ) || ( seq_sign == '+' ) )
+//            i++;
         
-        clear_line ( seq );
+//        clear_line ( seq, MAX_LINE );
         
         for ( power = 1.0; isdigit ( s [ i ] ); i++ ){
             printf ( "power = %G; s [ i = %d ] = %c;\n", power, i, s [ i ] );
@@ -81,13 +93,20 @@ double atof ( char s [] )
             power *= 10;
         };
         
-        printf ( "seq_rez = %G; seq_sign = %d;\n", seq_rez, seq_sign );
-        
-        if ( seq_sign == '+' )
-            rez = rez * ( 10 * seq_rez );
-        else 
-            rez = rez / ( 10 * seq_rez );
-    }
+        printf ( "seq_rez = %G; seq_sign = %d;\n\n", seq_rez, seq_sign );
+    
+        if ( seq_sign == 1 ){
+//             rez = rez * ( 10.0 * seq_rez );
+            rez = rez * step ( 10, seq_rez );  
+            printf ( "seq_sign = + and rez = %f;\n", rez );
+        }
+        else {
+//             rez = rez / ( 10.0 * seq_rez );
+            rez = rez / step ( 10, seq_rez );  
+            printf ( "seq_sign = - and rez = %f;\n", rez );
+        };
+    
+    };
 //    return ( sign * val / power );
     return rez;
 
@@ -100,13 +119,15 @@ void getline_my ( char line [], int size )
     int i = 0;
     int c = 0;
 
-    for ( i = 0; ( ( c = getchar () ) != EOF ) && c != '\n'; ++i ){
+    for ( i = 0; ( ( c = getchar () ) != EOF ) && c != '\n'; i++ ){
         line [ i ] = c;
 //        printf ( "line[%d] = %c; i = %d;\n", i, line[i], i );
     };
+//    i++;
+    line [ i ] = '\0';
 }
 
-void clear_line ( char line [] )
+void clear_line ( char line [], int size )
 
 {
     int i = 0;
@@ -115,6 +136,18 @@ void clear_line ( char line [] )
         line [ i ] = 0;
     };
 
+}
+
+double step ( double number, double step_d )
+
+{
+    int i = 0; 
+
+    for ( i = 1; i < step_d; i++ ){
+        number *= number;
+    };
+
+    return number;
 }
 
 
