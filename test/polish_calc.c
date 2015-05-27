@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #define MAXOP 100
 #define NUMBER '0'
-#define MAXVAL 100;
+#define MAXVAL 100
 
 int sp = 0;
 double val [ MAXVAL ];
@@ -11,6 +12,11 @@ double val [ MAXVAL ];
 int getop ( char [] );
 void push ( double );
 double pop ( void );
+
+int getch ( void );
+void ungetch ( int );
+int getop ( char s [] );
+
 
 void main ()
 
@@ -56,8 +62,36 @@ void push ( double f )
 
 {
     if ( sp < MAXVAL )
-        
+        val [ sp++ ] = f;
+    else 
+        print ( "Error:stack is full. %g not contain.\n", f );
 
+}
+
+double pop ( void ) 
+
+{
+
+    if ( sp > 0 )
+        return ( val [ --sp ] );
+    else 
+        printf ( "Error. Stack is empty.\n" );
+
+    return 0.0;
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
