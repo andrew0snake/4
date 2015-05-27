@@ -69,6 +69,7 @@ void push_my ( double f )
         val [ sp++ ] = f;
     else 
         printf ( "Error:stack is full. %g not contain.\n", f );
+        print ( "Error:stack is full. %g not contain.\n", f );
 
 }
 
@@ -132,6 +133,11 @@ void ungetch ( int c )
     
 
 }
+
+
+
+
+
 
 
 
