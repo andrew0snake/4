@@ -69,7 +69,6 @@ void push_my ( double f )
         val [ sp++ ] = f;
     else 
         printf ( "Error:stack is full. %g not contain.\n", f );
-        print ( "Error:stack is full. %g not contain.\n", f );
 
 }
 
@@ -97,17 +96,25 @@ int getop ( char s [] )
         ;
     s [ 1 ] = '\0';
     
-    if ( ! isdigit ( c ) && c != '.' )
+    if ( ! isdigit ( c ) && c != '.' ){
+        printf ( "in getop c is NOT a digit and = %c;\n", c );
         return c; /* is not a number */
-        
+    };
     i = 0;
     
-    if ( isdigit ( c ) )
-        while ( isdigit ( s [ ++i ] = c = getch () ) )
-            ;
-    if ( c == '.' )
-        while ( isdigit ( s [ ++i ] = c = getch () ) )
-            ;
+    if ( isdigit ( c ) ){	/* getting whole part */
+        printf ( "first check, whole part, c = %c; i = %d; s [ i = %d ] = %c;\n", c, i, i, s [ i ] );
+        while ( isdigit ( s [ i ] = c = getch () ) ){
+            printf ( "at step %d symbol = %c; s [ i ] = %c;  whole search.\n", i, c, s [ i ] );
+            ++i;
+        };
+        printf ( "after while s [ i = %d ] = %c; and s [ i - 1 = %d ] = %c; \n", i, s [ i ], i - 1, s [ i - 1 ] );
+    };
+    if ( c == '.' )		/* getting fractional part */
+        while ( isdigit ( s [ ++i ] = c = getch () ) ){
+            printf ( "at step %d symbol = %c;frational search.\n", i, c );
+        };
+
     s [ i ] = '\0';
     if ( c != EOF )
         ungetch ( c );
@@ -119,6 +126,7 @@ int getop ( char s [] )
 int getch ( void )
 
 {
+    printf ( "in getch bufp = %d;\n", bufp );
     return ( ( bufp > 0 ) ? ( buf [ --bufp ] ) : getchar () );
 
 }
@@ -130,19 +138,5 @@ void ungetch ( int c )
         printf ( "ungetch: too much symbols.\n" );
     else 
         buf [ bufp++ ] = c;
-    
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
