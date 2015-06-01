@@ -33,6 +33,7 @@ void main ()
         switch ( type ){
         case NUMBER:
             push_my ( atof ( s ) );
+            printf ( "push in stack %d;\n", atof ( s ) );
             break;
         case '+':
             push_my ( pop () + pop () );
@@ -69,7 +70,6 @@ void push_my ( double f )
         val [ sp++ ] = f;
     else 
         printf ( "Error:stack is full. %g not contain.\n", f );
-        print ( "Error:stack is full. %g not contain.\n", f );
 
 }
 
@@ -91,7 +91,7 @@ int getop ( char s [] )
 
 {
     int i = 0;
-    int  c = 0;
+    int c = 0;
     
     while (  s [ 0 ] = ( c =  getch () ) == ' ' || c  == '\t'  ) 
         ;
