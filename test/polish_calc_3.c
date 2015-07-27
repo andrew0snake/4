@@ -66,6 +66,7 @@ void main ()
 void push_my ( double f )
 
 {
+    printf ( "Entering in function push. sp = %d; val [ sp ] = %f, pushing value = %f;\n", sp, val [ sp ], f );
     if ( sp < MAXVAL )
         val [ sp++ ] = f;
     else 
@@ -93,8 +94,8 @@ int getop ( char s [] )
     int i = 0;
     int c = 0;
     
-    while (  s [ 0 ] = ( c =  getch () ) == ' ' || c  == '\t'  ) 
-        ;
+    while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
+        printf ( "c = %c;\n" );
     s [ 1 ] = '\0';
     
     if ( ! isdigit ( c ) && c != '.' ){
@@ -105,9 +106,9 @@ int getop ( char s [] )
     
     if ( isdigit ( c ) ){	/* getting whole part */
         printf ( "first check, whole part, c = %c; i = %d; s [ i = %d ] = %c;\n", c, i, i, s [ i ] );
-        while ( isdigit ( s [ i ] = c = getch () ) ){
-            printf ( "at step %d symbol = %c; s [ i ] = %c;  whole search.\n", i, c, s [ i ] );
-            ++i;
+        while ( isdigit ( s [ ++i ] = c = getch () ) ){
+            printf ( "at step %d symbol = %c; s [ i = %d ] = %c;  whole search.\n", i, c, i, s [ i ] );
+//            ++i;
         };
         printf ( "after while s [ i = %d ] = %c; and s [ i - 1 = %d ] = %c; \n", i, s [ i ], i - 1, s [ i - 1 ] );
     };
@@ -127,7 +128,7 @@ int getop ( char s [] )
 int getch ( void )
 
 {
-    printf ( "in getch bufp = %d;\n", bufp );
+    printf ( "\nin getch bufp = %d; buf [ bufp ] = %c;\n", bufp, buf [ bufp ] );
     return ( ( bufp > 0 ) ? ( buf [ --bufp ] ) : getchar () );
 
 }

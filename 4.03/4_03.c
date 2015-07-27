@@ -93,27 +93,22 @@ int getop ( char s [] )
     int i = 0;
     int c = 0;
     
-    while (  s [ 0 ] = ( c =  getch () ) == ' ' || c  == '\t'  ) 
-        ;
+    while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
+        printf ( "c = %c;\n" );
     s [ 1 ] = '\0';
     
     if ( ! isdigit ( c ) && c != '.' ){
-        printf ( "in getop c is NOT a digit and = %c;\n", c );
         return c; /* is not a number */
     };
     i = 0;
     
     if ( isdigit ( c ) ){	/* getting whole part */
-        printf ( "first check, whole part, c = %c; i = %d; s [ i = %d ] = %c;\n", c, i, i, s [ i ] );
-        while ( isdigit ( s [ i ] = c = getch () ) ){
-            printf ( "at step %d symbol = %c; s [ i ] = %c;  whole search.\n", i, c, s [ i ] );
-            ++i;
+        while ( isdigit ( s [ ++i ] = c = getch () ) ){
+//            ++i;
         };
-        printf ( "after while s [ i = %d ] = %c; and s [ i - 1 = %d ] = %c; \n", i, s [ i ], i - 1, s [ i - 1 ] );
     };
     if ( c == '.' )		/* getting fractional part */
         while ( isdigit ( s [ ++i ] = c = getch () ) ){
-            printf ( "at step %d symbol = %c;frational search.\n", i, c );
         };
 
     s [ i ] = '\0';
@@ -127,7 +122,6 @@ int getop ( char s [] )
 int getch ( void )
 
 {
-    printf ( "in getch bufp = %d;\n", bufp );
     return ( ( bufp > 0 ) ? ( buf [ --bufp ] ) : getchar () );
 
 }
