@@ -32,7 +32,9 @@ void main ()
     while ( ( type = getop ( s ) ) != EOF ){
         switch ( type ){
         case NUMBER:
+            printf ( "type == " );
             push_my ( atof ( s ) );
+            printf ( "push in stack %d;\n", atof ( s ) );
             break;
         case '+':
             push_my ( pop () + pop () );
@@ -92,21 +94,24 @@ int getop ( char s [] )
     int i = 0;
     int c = 0;
     
-    while (  s [ 0 ] = ( c =  getch () ) == ' ' || c  == '\t'  ) 
-        ;
+    while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
+        printf ( "c = %c;\n" );
     s [ 1 ] = '\0';
     
-    if ( ! isdigit ( c ) && c != '.' )
+    if ( ! isdigit ( c ) && c != '.' ){
         return c; /* is not a number */
-        
+    };
     i = 0;
     
-    if ( isdigit ( c ) )
-        while ( isdigit ( s [ ++i ] = c = getch () ) )
-            ;
-    if ( c == '.' )
-        while ( isdigit ( s [ ++i ] = c = getch () ) )
-            ;
+    if ( isdigit ( c ) ){	/* getting whole part */
+        while ( isdigit ( s [ ++i ] = c = getch () ) ){
+//            ++i;
+        };
+    };
+    if ( c == '.' )		/* getting fractional part */
+        while ( isdigit ( s [ ++i ] = c = getch () ) ){
+        };
+
     s [ i ] = '\0';
     if ( c != EOF )
         ungetch ( c );
@@ -129,19 +134,5 @@ void ungetch ( int c )
         printf ( "ungetch: too much symbols.\n" );
     else 
         buf [ bufp++ ] = c;
-    
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
