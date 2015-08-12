@@ -9,16 +9,16 @@ void main ()
 
 
     while ( ( c = getchar () ) != EOF ){
-       if ( c == NUMBER )
-           printf ( "c == NUMBER;\n" );
-       else {
-           if ( c == '\n' )
-               printf ( "c == \\n;\n" );
-           else
-               printf ( "c is NOT NUMBER;\n" ); 
-           }
-    
-    }
+        switch ( c ){ 
+           case NUMBER:   
+               printf ( "1. c == NUMBER;\n" );
+               break;
+           case 'q':
+               printf ( "2. c == q;\n" );
+               break;
+        }
+     }
+
 
 
 
