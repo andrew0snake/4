@@ -4,14 +4,15 @@
 
 #define MAXOP 100
 #define NUMBER '0'
+#define WORDS 'a'
 #define MAXVAL 100
 
 #define BUFSIZE 100
 
-int sp = 0;
+int sp = 0;             //stack pointer, pointer at free position of 
 double val [ MAXVAL ];
-char buf [ BUFSIZE ]; //buffer for ungetch
-int bufp = 0; //next free position for ungetch
+char buf [ BUFSIZE ];   //buffer for ungetch
+int bufp = 0;           //next free position for ungetch
 
 int getop ( char [] );
 void push_my ( double );
@@ -49,6 +50,9 @@ void main ()
                        if ( type == '/' ){
                             printf ( "type = /;\n" );
                         } 
+                       else 
+                           if ( type == WORDS )
+                               printf ( "type = WORDS;\n" );
 
     }
 }
@@ -87,16 +91,18 @@ int getop ( char s [] )
     while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
         printf ( "c = %c;\n" );
     s [ 1 ] = '\0';
+    printf ( "after first check s [ 0 ] = %c in char = %d in digit ;\n", s [ 0 ], s [ 0 ] );
     
     if ( ! isdigit ( c ) && c != '.' ){
+        printf ( "in getop c is not digit or point and is returned;\n" );
         return c; /* is not a number */
     };
     i = 0;
     
     if ( isdigit ( c ) ){	/* getting whole part */
         while ( isdigit ( s [ ++i ] = c = getch () ) ){
-//            ++i;
-        };
+		printf ( "int first check c = %c in char = %d in digit;\n", c, c );
+        }
     };
     if ( c == '.' )		/* getting fractional part */
         while ( isdigit ( s [ ++i ] = c = getch () ) ){
