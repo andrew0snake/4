@@ -32,11 +32,7 @@ void main ()
     while ( ( type = getop ( s ) ) != EOF ){
         switch ( type ){
         case NUMBER:
-<<<<<<< HEAD
-            printf ( "type == " );
-=======
             printf ( "type = %d;\n", type );
->>>>>>> 8f669f38a9d2deeff6882d14f7a2e0a11b5e1d44
             push_my ( atof ( s ) );
             printf ( "push in stack %d;\n", atof ( s ) );
             break;
@@ -113,13 +109,15 @@ int getop ( char s [] )
         ;
     
     if ( c == '.' )		/* getting fractional part */
-        while ( isdigit ( s [ ++i ] = c = getch () ) )
-        ;
+        while ( isdigit ( s [ ++i ] = c = getch () ) ){
+            printf ( "s [ i = %d ] = %d in digit and %c in char;\n", i, s [ i ], s [ i ] );
+        };
+        
 
     s [ i ] = '\0';
     if ( c != EOF )
         ungetch ( c );
-        
+    printf ( "Whole string is:%s;\n", s );    
     return NUMBER;
 
 }

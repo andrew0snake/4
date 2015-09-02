@@ -91,7 +91,7 @@ int getop ( char s [] )
     while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
         printf ( "c = %c;\n" );
     s [ 1 ] = '\0';
-    printf ( "after first check s [ 0 ] = %c in char = %d in digit ;\n", s [ 0 ], s [ 0 ] );
+    printf ( "after first while s [ 0 ] = %c in char = %d in digit ;\n", s [ 0 ], s [ 0 ] );
     
     if ( ! isdigit ( c ) && c != '.' ){
         printf ( "in getop c is not digit or point and is returned;\n" );
@@ -101,9 +101,10 @@ int getop ( char s [] )
     
     if ( isdigit ( c ) ){	/* getting whole part */
         while ( isdigit ( s [ ++i ] = c = getch () ) ){
-		printf ( "int first check c = %c in char = %d in digit;\n", c, c );
+		printf ( "in second while ( if (isdigit ( c ) ) ) s [ i = %d ]  = %c in char = %d in digit;\n", i, c, c );
         }
     };
+    printf ( "After second while s [ i = %d ] = %c in char and %d in digit;\n", i, s [ i ], s [ i ] );
     if ( c == '.' )		/* getting fractional part */
         while ( isdigit ( s [ ++i ] = c = getch () ) ){
         };
@@ -111,7 +112,7 @@ int getop ( char s [] )
     s [ i ] = '\0';
     if ( c != EOF )
         ungetch ( c );
-        
+    printf ( "Whole string = %s;\n", s );    
     return NUMBER;
 
 }

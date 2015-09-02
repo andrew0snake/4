@@ -9,8 +9,6 @@ void main ()
 
 
     while ( ( c = getchar () ) != EOF ){
-<<<<<<< HEAD
-<<<<<<< HEAD
         switch ( c ) {
             case NUMBER:
                 printf ( "c == NUMBER == %c;\n", c );
@@ -18,7 +16,6 @@ void main ()
                 printf ( "c == w == %c;\n", c );
 
         } 
-=======
        if ( c == NUMBER )
            printf ( "c == NUMBER;\n" );
        else {
@@ -28,9 +25,7 @@ void main ()
                printf ( "c is NOT NUMBER;\n" ); 
            }
     
->>>>>>> c1c9a4cdbb85cace554b2744828bbbc6a4cc1e80
-    }
-=======
+    
         switch ( c ){ 
            case NUMBER:   
                printf ( "1. c == NUMBER;\n" );
@@ -40,9 +35,6 @@ void main ()
                break;
         }
      }
-
->>>>>>> 8f669f38a9d2deeff6882d14f7a2e0a11b5e1d44
-
 
 
 
