@@ -8,7 +8,7 @@
 
 #define BUFSIZE 100
 
-int sp = 0;
+int sp = 0; //stack pointer
 double val [ MAXVAL ];
 char buf [ BUFSIZE ]; //buffer for ungetch
 int bufp = 0; //next free position for ungetch
@@ -47,12 +47,15 @@ void main ()
             push_my ( pop () - op2 );
             break;
         case '/':
-            op2 = pop();
+            op2 = pop ();
             if ( op2 != 0.0 )
                 push_my ( pop () / op2 );
             else 
                 printf ( "Error, division by zero.\n" );
             break;
+        case '%':
+            op2 = pop ();
+            push ( );
         case '\n':
             printf ( "\t%.8g\n", pop () );
             break;

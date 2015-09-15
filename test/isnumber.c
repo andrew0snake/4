@@ -36,6 +36,10 @@ void main ()
         }
      }
 
+    for ( i = 0; i < 100; ++i ){
+        printf ( "i = %d in digit and = %c in char;\n", i, i );
+ 
+    }
 
 
 }
