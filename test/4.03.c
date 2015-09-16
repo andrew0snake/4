@@ -8,7 +8,6 @@
 
 #define BUFSIZE 100
 
-char neg = 0; //negativity pointer
 int sp = 0; //stack pointer
 double val [ MAXVAL ];
 char buf [ BUFSIZE ]; //buffer for ungetch
@@ -33,11 +32,9 @@ void main ()
     while ( ( type = getop ( s ) ) != EOF ){
         switch ( type ){
         case NUMBER:
-            if ( neg == 0 )
-                push_my ( atof ( s ) );
-            else 
-                push_my ( - atof ( s ) );
-	    printf ( "push in stack %lf; neg = %d;\n", atof ( s ), neg );
+            printf ( "type = %d;\n", type );
+            push_my ( atof ( s ) );
+            printf ( "push in stack %d;\n", atof ( s ) );
             break;
         case '+':
             push_my ( pop () + pop () );
@@ -46,13 +43,8 @@ void main ()
             push_my ( pop () * pop () );
             break;
         case '-':
-            if ( sp == 2 ) {
-                op2 = pop ();
-                push_my ( pop () - op2 );
-            }
-            else {
-                neg == 1;
-            }
+            op2 = pop ();
+            push_my ( pop () - op2 );
             break;
         case '/':
             op2 = pop ();
@@ -62,8 +54,8 @@ void main ()
                 printf ( "Error, division by zero.\n" );
             break;
         case '%':
-//            op2 = pop ();
-//            push_my ( pop () % op2 );
+            op2 = pop ();
+//            push_my ( );
         case '\n':
             printf ( "\t%.8g\n", pop () );
             break;
