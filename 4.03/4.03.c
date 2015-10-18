@@ -37,7 +37,11 @@ void main ()
                 push_my ( atof ( s ) );
             else 
                 push_my ( - atof ( s ) );
-	    printf ( "push in stack %lf; neg = %d;\n", atof ( s ), neg );
+            if ( neg == 0 )
+	        printf ( "push in stack %lf; neg = %d;\n", atof ( s ), neg );
+            else 
+                printf ( "push in stack -%lf; neg = %d;\n", atof ( s ), neg );
+
             break;
         case '+':
             push_my ( pop () + pop () );
@@ -51,7 +55,7 @@ void main ()
                 push_my ( pop () - op2 );
             }
             else {
-                neg == 1;
+                neg = 1;
             }
             break;
         case '/':
@@ -92,8 +96,8 @@ double pop ( void )
 {
 
     if ( sp > 0 ){
+        printf ( "After decrease stack pointer sp = %d; and returning value = %4.0lf;\n", sp, val [ sp - 1 ] );
         return ( val [ --sp ] );
-        printf ( "After decrease stack pointer sp = %d;\n", sp );
     }
     else 
         printf ( "Error. Stack is empty.\n" );
