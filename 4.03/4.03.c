@@ -35,7 +35,11 @@ void main ()
         case NUMBER:
             if ( neg == 0 )
                 push_my ( atof ( s ) );
+<<<<<<< HEAD
             else { 
+=======
+            else {
+>>>>>>> 976aa5a382488787af9c219b8eb3941dc4602907
                 push_my ( - atof ( s ) );
                 neg = 0;
             }
