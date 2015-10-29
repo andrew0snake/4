@@ -35,8 +35,10 @@ void main ()
         case NUMBER:
             if ( neg == 0 )
                 push_my ( atof ( s ) );
-            else 
+            else { 
                 push_my ( - atof ( s ) );
+                neg = 0;
+            }
             if ( neg == 0 )
 	        printf ( "push in stack %lf; neg = %d;\n", atof ( s ), neg );
             else 
