@@ -35,11 +35,7 @@ void main ()
         case NUMBER:
             if ( neg == 0 )
                 push_my ( atof ( s ) );
-<<<<<<< HEAD
-            else { 
-=======
             else {
->>>>>>> 976aa5a382488787af9c219b8eb3941dc4602907
                 push_my ( - atof ( s ) );
                 neg = 0;
             }
@@ -57,6 +53,7 @@ void main ()
             break;
         case '-':
             if ( sp == 2 ) {
+                printf ( "Operation minus.\n" );
                 op2 = pop ();
                 push_my ( pop () - op2 );
             }
@@ -75,7 +72,7 @@ void main ()
 //            op2 = pop ();
 //            push_my ( pop () % op2 );
         case '\n':
-            printf ( "\t%.8g\n", pop () );
+            printf ( "Result = %.8g; neg = %d;\n", pop (), neg );
             break;
         default:
             printf ( "Error, unknown operation %s.\n", s );
@@ -90,7 +87,7 @@ void push_my ( double f )
 {
     if ( sp < MAXVAL ){
         val [ sp++ ] = f;
-        printf ( "After addition stack pointer sp = %d;\n", sp );
+        printf ( "After addition stack pointer sp = %d; and pushing   value = %4.0lf;\n", sp, val [ sp - 1 ] );
     }
     else 
         printf ( "Error:stack is full. %g not contain.\n", f );
@@ -102,7 +99,7 @@ double pop ( void )
 {
 
     if ( sp > 0 ){
-        printf ( "After decrease stack pointer sp = %d; and returning value = %4.0lf;\n", sp, val [ sp - 1 ] );
+        printf ( "After decrease stack pointer sp = %d; and returning value = %4.0lf;\n", sp - 1, val [ sp - 1 ] );
         return ( val [ --sp ] );
     }
     else 
