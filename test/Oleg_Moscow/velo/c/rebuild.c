@@ -4,6 +4,7 @@
 
 void clean_str ( char str [] );
 void del_sys_symb ( char str_to [], char str_from [] );
+void put_str ( char str [] );
 
 void main () {
 
@@ -24,34 +25,28 @@ void main () {
     
     for ( sc = 0; sc < 50; sc++ ){
         while ( fgets ( str1, 400, source_file) != NULL ){
+            printf ( "getted string = %s,\n", str1 );
             if ( str1 [ 0 ] == '<' ) { 
+//                if ( strlen ( str_tmp ) != NULL )
+                    put_str ( str_tmp );
                 del_sys_symb ( str2, str1 );
-                if ( prev == 0 ) {
-                   prev = 1;
-                   clean_str ( str_tmp );
-                   strcpy ( str_tmp, str2 );
-                }
-                else {
-                    tmp_file = fopen ( "tmp_file", "w+" );
-                    fputs ( str_tmp, tmp_file );
-                    fclose ( tmp_file );
-                    clean_str ( str_tmp);
-                }
+                printf ( "after deleting system symbols string = %s;\n", str2 );
+//                printf ( "last symbol of string = %d in digital and %c in char;\n", str2 [ strlen ( str2 ) - 1 ],  str2 [ strlen ( str2 ) - 1 ] );
+                str2 [ strlen ( str2 ) -1 ] = ' ';
+                clean_str ( str_tmp );
+                strcpy ( str_tmp, str2 );
+                
+                clean_str ( str2 );
+                clean_str ( str1 );
             }
             else {
-                prev = 0;  
-                   strcat ( str2, str1 );
-                   tmp_file = fopen ( "tmp_file", "w+" );
-                   fputs ( str2, tmp_file );
-                   fclose ( tmp_file );
-            }   
-                    fputs ( str1, tmp_file );
-            
+               strcat ( str_tmp, str1 );
+               put_str ( str_tmp );
+               clean_str ( str1 );
+            };
         };
-    };
-    
     fclose ( source_file );
-
+    }
 }
 
 void  clean_str ( char str [] ) {
@@ -80,6 +75,16 @@ void del_sys_symb ( char str_to [], char str_from [] ) {
     };
 }
 
+void put_str ( char str [] ) {
 
+    FILE *tmp_file;
+
+    tmp_file = fopen ( "tmp_file", "a" );
+    fputs ( str, tmp_file );
+    fclose ( tmp_file );
+
+    printf ( "putted string = %s;\n", str );
+
+}
 
 
