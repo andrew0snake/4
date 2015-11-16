@@ -21,6 +21,7 @@ double pop ( void );
 int getch ( void );
 void ungetch ( int );
 int getop ( char s [] );
+int double2int ( double );
 
 
 void main ()
@@ -160,3 +161,37 @@ void ungetch ( int c )
         buf [ bufp++ ] = c;
 
 }
+
+
+int double2int ( double source) {
+
+    int i = 0;
+    int dest = 0;
+    double per = 0;
+  
+
+    if ( source > 0 ) {
+        if ( source < 0.5 )
+            dest = 0;
+        else {
+            if ( source >= 0.5 && source <=1 )
+                dest = 1;
+            else {
+                per = source;
+                while ( per >= 1.0 ){
+                    per = per / 10;
+                    
+                    
+                    
+                }
+                    
+            }
+        }
+    
+    }
+
+
+
+}
+
+
