@@ -16,6 +16,7 @@ void main () {
     
     int string_number= 0;
     int j = 0;
+    int note_number = 0;
     short int pointer = 0;
 
     char string_tmp [ MAXSIZE_STRING ];
@@ -35,6 +36,8 @@ void main () {
         if ( pointer > 0 ) {
             printf ( "In string %d found note at position %d;\n", string_number, pointer );
             printf ( "and next symbol after string_tmp [ pointer + strlen ( string_note ) = %5lu ] is %c;\n", pointer + strlen ( string_note ), string_tmp [ pointer + strlen ( string_note )  ] );            
+            note_number = get_note_number ( pointer, string_tmp );
+            printf ( "note = %d;\n", note_number);
          }
         string_number++;
         pointer = 0;
@@ -112,18 +115,24 @@ int get_str_conj ( int start, char str_where [ MAXSIZE_STRING ], char str_what [
 int get_note_number ( int pointer, char string [ MAXSIZE_STRING ] ) {
 
     int i = 0;
+    int j = 0;
     int len = 0;
-    char note_number [ 100000 ];
+    int note_number = 0;
+    char note_number_chars [ 100000 ];
 
     len = pointer + strlen ( string ) + 2;
-    clear_string ( note_number );
+    clear_string ( note_number_chars );
+    i = len;
 
-    while ( s)
+    while ( string [ i ] != '"' ) {
+        note_number_chars [ j ] = string [ i ];
+        i += 1;
+        j += 1;
+    };
 
+    note_number = atoi ( note_number_chars );
 
-
-
-
+    return note_number;
 }
 
 void clear_string ( char string [] ) {
@@ -132,8 +141,8 @@ void clear_string ( char string [] ) {
 
 
     while ( i < strlen ( string ) ) {
-
-
+        string [ i ] = 0;
+        i++;
     }
 
 }
