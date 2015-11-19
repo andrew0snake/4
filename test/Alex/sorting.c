@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #define MAXSIZE_STRING 50000
+#define MAX_NOTES_AMOUNT 100000
 
     char string_note [ 23 ] = { '<','a',' ','t','y','p','e','=','"','n','o','t','e','"',' ','l',':','h','r','e','f','=','"' };
     char string_notes [ 19 ] = { '<','b','o','d','y',' ','n','a','m','e','=','"','n','o','t','e','s','"','>' };
@@ -17,7 +18,8 @@ void main () {
     int string_number= 0;
     int j = 0;
     int note_number = 0;
-    short int pointer = 0;
+    int pointer = 0;
+    int pointer_end = 0;
 
     char string_tmp [ MAXSIZE_STRING ];
 
@@ -35,7 +37,8 @@ void main () {
         pointer = get_str_conj ( 0, string_tmp, string_note );
         if ( pointer > 0 ) {
             printf ( "In string %d found note at position %d;\n", string_number, pointer );
-            printf ( "and next symbol after string_tmp [ pointer + strlen ( string_note ) = %5lu ] is %c;\n", pointer + strlen ( string_note ), string_tmp [ pointer + strlen ( string_note )  ] );            
+            pointer_end = pointer + strlen ( string_note );
+//            printf ( "and next symbol after string_tmp [ pointer + strlen ( string_note ) = %5lu ] is %c;\n", pointer_end , string_tmp [ pointer_end  ] );            
             note_number = get_note_number ( pointer, string_tmp );
             printf ( "note = %d;\n", note_number);
          }
@@ -89,7 +92,6 @@ int get_str_conj ( int start, char str_where [ MAXSIZE_STRING ], char str_what [
             k = i + 1;
             j = 1;
             while ( ( check_conj == 0 ) && ( j < len_what ) ) {
-//                printf ( "j = %3d, k = %3d, str_where [ %3d ] = %c, check_conj = %d;\n", j, k, k, str_where [ k ], check_conj ); 
                 if ( str_what [ j ] == str_where [ k ] ) {
                     check_conj = 0;
                 } 
@@ -100,7 +102,6 @@ int get_str_conj ( int start, char str_where [ MAXSIZE_STRING ], char str_what [
                 k++;
             }
             if ( check_conj == 0 ) {
-//                printf ( "Found conjuction in position %d. Whole string seems so^%s\n", i, str_where );
                 return i;
             };
         }          
@@ -118,9 +119,9 @@ int get_note_number ( int pointer, char string [ MAXSIZE_STRING ] ) {
     int j = 0;
     int len = 0;
     int note_number = 0;
-    char note_number_chars [ 100000 ];
+    char note_number_chars [ MAX_NOTES_AMOUNT ];
 
-    len = pointer + strlen ( string ) + 2;
+    len = pointer + strlen ( string_note ) + 3;
     clear_string ( note_number_chars );
     i = len;
 
@@ -138,7 +139,6 @@ int get_note_number ( int pointer, char string [ MAXSIZE_STRING ] ) {
 void clear_string ( char string [] ) {
 
     int i = 0;
-
 
     while ( i < strlen ( string ) ) {
         string [ i ] = 0;
