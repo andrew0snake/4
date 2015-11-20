@@ -9,26 +9,31 @@
 int get_str_conj ( int start, char str_where [ MAXSIZE_STRING ], char str_what [ MAXSIZE_STRING ] );
 int get_note_number ( int pointer, char string [ MAXSIZE_STRING ] );
 void clear_string ( char string [] );
-
+void clear_array ( int array [ MAX_NOTES_AMOUNT ] );
 
 void main () {
 
     FILE *source_file, *dest_file;
     
     int string_number= 0;
+    int i = 0;
     int j = 0;
     int note_number = 0;
     int pointer = 0;
     int pointer_end = 0;
 
+    int note_array [ MAX_NOTES_AMOUNT ];
     char string_tmp [ MAXSIZE_STRING ];
+    char string_concat [ MAXSIZE_STRING ];
+
+    clear_array ( note_array );
 
     source_file = fopen ( "source_file", "r" );
     printf ( "=====================================================\n" );
     printf ( "=====================================================\n" );
     printf ( "=====================================================\n" );
     printf ( "=====================================================\n" );
-    printf ( "strlen ( string_note ) = %5lu;\n", strlen ( string_note ) );
+    printf ( "strlen ( string_note ) =  %5lu;\n", strlen ( string_note ) );
     printf ( "strlen ( string_notes ) = %5lu;\n", strlen ( string_notes ) );
 
 
@@ -38,16 +43,28 @@ void main () {
         if ( pointer > 0 ) {
             printf ( "In string %d found note at position %d;\n", string_number, pointer );
             pointer_end = pointer + strlen ( string_note );
-//            printf ( "and next symbol after string_tmp [ pointer + strlen ( string_note ) = %5lu ] is %c;\n", pointer_end , string_tmp [ pointer_end  ] );            
+            printf ( "and next symbol after string_tmp [ pointer + strlen ( string_note ) = %5lu ] is %c;\n", pointer_end , string_tmp [ pointer_end  ] );            
             note_number = get_note_number ( pointer, string_tmp );
             printf ( "note = %d;\n", note_number);
-         }
+            note_array [ i ] = note_number;
+            
+            i++;
+        }
+        else {
+            dest_file = fopen ( "dest_file", "a+" );
+            fputs ( string_tmp, dest_file );
+            fclose ( dest_file );
+        }
         string_number++;
         pointer = 0;
     }
 
     fclose ( source_file );
+    for ( j = 0; j < i; j++ ) {
+        printf ( "note_array [ %d ] = %d;\n", j, note_array [ j ] );
 
+    }
+    printf ( "===================================================\n" );
 }
 
 int get_str_conj ( int start, char str_where [ MAXSIZE_STRING ], char str_what [ MAXSIZE_STRING ] ) {
@@ -147,4 +164,12 @@ void clear_string ( char string [] ) {
 
 }
 
+ void clear_array ( int array [ MAX_NOTES_AMOUNT ] ) {
+
+    int i = 0;
+
+    for ( i = 0; i < MAX_NOTES_AMOUNT; i++ ) {
+        array [ i ] = 0;
+    }
+}
 
