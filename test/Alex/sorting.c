@@ -1,13 +1,17 @@
 #include <stdio.h>
 #include <string.h>
+#include <cstdlib.h>
 #define MAXSIZE_STRING 50000
 #define MAX_NOTES_AMOUNT 100000
-
+#define MAX_NOTE_SIZE 100000
     char string_note [ 23 ] = { '<','a',' ','t','y','p','e','=','"','n','o','t','e','"',' ','l',':','h','r','e','f','=','"' };
     char string_notes [ 19 ] = { '<','b','o','d','y',' ','n','a','m','e','=','"','n','o','t','e','s','"','>' };
 
 int get_str_conj ( int start, char str_where [ MAXSIZE_STRING ], char str_what [ MAXSIZE_STRING ] );
 int get_note_number ( int pointer, char string [ MAXSIZE_STRING ] );
+void clear_string ( char string [ MAXSIZE_STRING ] );
+void clear_array ( int array [ MAX_NOTES_AMOUNT ] );
+void replacement_notes ( int pointer, int note_number, char string_from [ MAXSIZE_STRING ] , char string_where [ MAXSIZE_STRING ] );
 void clear_string ( char string [] );
 void clear_array ( int array [ MAX_NOTES_AMOUNT ] );
 
@@ -24,6 +28,7 @@ void main () {
 
     int note_array [ MAX_NOTES_AMOUNT ];
     char string_tmp [ MAXSIZE_STRING ];
+    char string_repl [ MAXSIZE_STRING ];
     char string_concat [ MAXSIZE_STRING ];
 
     clear_array ( note_array );
@@ -43,6 +48,11 @@ void main () {
         if ( pointer > 0 ) {
             printf ( "In string %d found note at position %d;\n", string_number, pointer );
             pointer_end = pointer + strlen ( string_note );
+            printf ( "and next symbol after string_tmp [ pointer + strlen ( string_note ) = %5d ] is %c;\n", pointer_end , string_tmp [ pointer_end  ] );            
+            note_number = get_note_number ( pointer, string_tmp );
+            printf ( "note = %d;\n", note_number);
+            note_array [ i ] = note_number;
+            replacement_notes ( pointer_end, note_number, string_tmp, string_repl );   
             printf ( "and next symbol after string_tmp [ pointer + strlen ( string_note ) = %5lu ] is %c;\n", pointer_end , string_tmp [ pointer_end  ] );            
             note_number = get_note_number ( pointer, string_tmp );
             printf ( "note = %d;\n", note_number);
@@ -153,7 +163,7 @@ int get_note_number ( int pointer, char string [ MAXSIZE_STRING ] ) {
     return note_number;
 }
 
-void clear_string ( char string [] ) {
+void clear_string ( char string [ MAXSIZE_STRING ] ) {
 
     int i = 0;
 
@@ -171,5 +181,25 @@ void clear_string ( char string [] ) {
     for ( i = 0; i < MAX_NOTES_AMOUNT; i++ ) {
         array [ i ] = 0;
     }
+}
+void replacement_notes ( int pointer, int note_number, char string_from [ MAXSIZE_STRING ] , char string_where [ MAXSIZE_STRING ] ) {
+
+    int i = 0;
+
+    char string_whole [ MAXSIZE_STRING ];
+    char note [ MAX_NOTE_SIZE ];
+
+    clear_string ( string_whole );
+
+    for ( i = 0; i < ( pointer + 3 ); i++ ) {
+        string_whole [ i ] = string_from [ i ];
+    }
+    
+    itoa ( note_number, note, 10 );
+    
+    
+    
+    printf ( "getted string is :%s;\n", string_whole );
+
 }
 
