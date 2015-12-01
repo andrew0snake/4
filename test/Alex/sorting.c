@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-#include <cstdlib.h>
-#define MAXSIZE_STRING 50000
+#include <stdlib.h>
+#define MAXSIZE_STRING 100000
 #define MAX_NOTES_AMOUNT 100000
 #define MAX_NOTE_SIZE 100000
     char string_note [ 23 ] = { '<','a',' ','t','y','p','e','=','"','n','o','t','e','"',' ','l',':','h','r','e','f','=','"' };
@@ -11,20 +11,22 @@ int get_str_conj ( int start, char str_where [ MAXSIZE_STRING ], char str_what [
 int get_note_number ( int pointer, char string [ MAXSIZE_STRING ] );
 void clear_string ( char string [ MAXSIZE_STRING ] );
 void clear_array ( int array [ MAX_NOTES_AMOUNT ] );
-void replacement_notes ( int pointer, int note_number, char string_from [ MAXSIZE_STRING ] , char string_where [ MAXSIZE_STRING ] );
+void replacement_notes ( int true_note,  int pointer, int note_number, char string_from [ MAXSIZE_STRING ] , char string_whole [ MAXSIZE_STRING ] );
 void clear_string ( char string [] );
 void clear_array ( int array [ MAX_NOTES_AMOUNT ] );
+void itoa_my ( int digit, char string [ MAXSIZE_STRING ] ); 
 
 void main () {
 
     FILE *source_file, *dest_file;
     
     int string_number= 0;
-    int i = 0;
+    int i = 1;
     int j = 0;
     int note_number = 0;
     int pointer = 0;
     int pointer_end = 0;
+    short int exit_check = 0;
 
     int note_array [ MAX_NOTES_AMOUNT ];
     char string_tmp [ MAXSIZE_STRING ];
@@ -44,33 +46,42 @@ void main () {
 
     while ( fgets ( string_tmp, MAXSIZE_STRING, source_file ) != 0 ) {
         printf ( "getted string = %s;\n", string_tmp );
-        pointer = get_str_conj ( 0, string_tmp, string_note );
-        if ( pointer > 0 ) {
-            printf ( "In string %d found note at position %d;\n", string_number, pointer );
-            pointer_end = pointer + strlen ( string_note );
-            printf ( "and next symbol after string_tmp [ pointer + strlen ( string_note ) = %5d ] is %c;\n", pointer_end , string_tmp [ pointer_end  ] );            
-            note_number = get_note_number ( pointer, string_tmp );
-            printf ( "note = %d;\n", note_number);
-            note_array [ i ] = note_number;
-            replacement_notes ( pointer_end, note_number, string_tmp, string_repl );   
-            printf ( "and next symbol after string_tmp [ pointer + strlen ( string_note ) = %5lu ] is %c;\n", pointer_end , string_tmp [ pointer_end  ] );            
-            note_number = get_note_number ( pointer, string_tmp );
-            printf ( "note = %d;\n", note_number);
-            note_array [ i ] = note_number;
-            
-            i++;
-        }
-        else {
-            dest_file = fopen ( "dest_file", "a+" );
-            fputs ( string_tmp, dest_file );
-            fclose ( dest_file );
-        }
+        exit_check = 0;
+        while ( exit_check == 0 ) {
+            pointer = get_str_conj ( pointer + 1, string_tmp, string_note );
+           if ( pointer == -2 ) {
+                dest_file = fopen ( "dest_file", "a+" );
+                fputs ( string_tmp, dest_file );
+                fclose ( dest_file );
+                exit_check = 1;
+            };
+            if ( pointer > 0 ) {
+                printf ( "In string %d found note at position %d;\n", string_number, pointer );
+                pointer_end = pointer + strlen ( string_note );
+                note_number = get_note_number ( pointer, string_tmp );
+                printf ( "note = %d;true_note = %d;\n", note_number, i );
+                note_array [ i ] = note_number;
+                replacement_notes ( i, pointer_end, note_number, string_tmp, string_repl );   
+                printf ( "string with replaced note = %s;\n", string_repl );
+                clear_string ( string_tmp );
+                strcpy ( string_tmp, string_repl );    
+       
+                i++;
+            }
+            else {
+                dest_file = fopen ( "dest_file", "a+" );
+                fputs ( string_tmp, dest_file );
+                fclose ( dest_file );
+                exit_check = 1;
+            }
+        };
         string_number++;
         pointer = 0;
+ 
     }
 
     fclose ( source_file );
-    for ( j = 0; j < i; j++ ) {
+    for ( j = 1; j < i; j++ ) {
         printf ( "note_array [ %d ] = %d;\n", j, note_array [ j ] );
 
     }
@@ -167,7 +178,8 @@ void clear_string ( char string [ MAXSIZE_STRING ] ) {
 
     int i = 0;
 
-    while ( i < strlen ( string ) ) {
+    while ( i < MAXSIZE_STRING ) {
+//    while ( i < strlen ( string ) ) {
         string [ i ] = 0;
         i++;
     }
@@ -182,24 +194,150 @@ void clear_string ( char string [ MAXSIZE_STRING ] ) {
         array [ i ] = 0;
     }
 }
-void replacement_notes ( int pointer, int note_number, char string_from [ MAXSIZE_STRING ] , char string_where [ MAXSIZE_STRING ] ) {
+/*void replacement_notes ( int true_note, int pointer, int note_number, char string_from [ MAXSIZE_STRING ] , char string_whole [ MAXSIZE_STRING ] ) {
 
     int i = 0;
+    int j = 0;
+    int k = 0;
+    int len = 0;
 
-    char string_whole [ MAXSIZE_STRING ];
     char note [ MAX_NOTE_SIZE ];
 
     clear_string ( string_whole );
 
+    printf ( "+++++++++++++++++++++++++++++++++++++++++\n" );
+
     for ( i = 0; i < ( pointer + 3 ); i++ ) {
         string_whole [ i ] = string_from [ i ];
     }
+    string_whole [ i ] = '\0';
     
-    itoa ( note_number, note, 10 );
+    itoa_my ( true_note, note );
+  
+    strcat ( string_whole, note );
+
+    j = pointer + 3;
+    i++;
+
+    while ( string_from [ j ] != '"' ) {
+        j++;
+    };
+
+    len = strlen ( string_from );
+
+    k = j;
+    while ( string_from [ k ] != '[' ) {
+        string_whole [ i ] = string_from [ k ];
+        k++;
+        i++;
+    };
+    string_whole [ i ] = string_from [ k ]; 
+    string_whole [ i + 1 ] = '\0';
+    strcat ( string_whole, note );
     
+    i++;
+    i = i + strlen ( note ); 
+    k++;
+
+    while ( string_from [ k ] != ']' ) { 
+        k++;
+    };
+    string_whole [ i ] = string_from [ k ];
     
+    i++;
+    k++;
+
+    for ( j = k; j < len; j++, i++ ) {
+        string_whole [ i ] = string_from [ j ];
+
+    };
+   printf ( "getted string is :%s;\n", string_whole );
+    printf ( "-----------------------------------------\n" );
+
+}
+*/
+
+void itoa_my ( int digit, char string [ MAXSIZE_STRING ] ) {
+
+    int i = 0;
+    int j = 0;
+    int len = 0;
+    int value = 0;
+    int residual = 0;
+    char tmp [ MAXSIZE_STRING ];
+    char rev [ MAXSIZE_STRING ];   
+
+    value = digit;
+
+    while ( value > 0 ) {
+        residual  = value % 10;
+        value /= 10;
+        tmp [ i ] = residual + '0';
+        i++;
+    }    
+    i--;
+    len = i;
+    for ( j = 0; j <= len; j++, i-- ) {
+        rev [ j ] = tmp [ i ];
+    }
+ 
+    strcpy ( string, rev );
+
+}
+
+void replacement_notes ( int true_note, int pointer, int note_number, char string_from [ MAXSIZE_STRING ] , char string_replaced [ MAXSIZE_STRING ] ) {
+
+
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int l = 0;
+
+    char string_whole [ MAXSIZE_STRING ];
+    char true_note_string [ MAXSIZE_STRING ];    
+
+    for ( i = 0; i < pointer + 3; i++ ) {
+        string_whole [ i ] = string_from [ i ];
+
+    };
+    itoa_my ( true_note, true_note_string );
+    strcat ( string_whole, true_note_string );
+
+    i++;
+    while ( string_from [ i ] != '"' ) {
+        i++;
+    }
+    j = i;
+    k = strlen ( string_whole ) ;
+    while ( string_from [ j ] != '[' ) {
+        string_whole [ k ] = string_from [ j ];
+        j++;
+        k++;
+    }
+    string_whole [ k ] = string_from [ j ];
+//    j++;
+    k++;
+    strcat ( string_whole, true_note_string );
     
-    printf ( "getted string is :%s;\n", string_whole );
+    while ( string_from [ j ] != ']' ) {
+        j++;
+    };
+//    j++;
+    k = strlen ( string_whole );
+    string_whole [ k ] = string_from [ j ];
+    j++;
+    k++;
+    
+    while ( string_from [ j ] != '\0' ) {
+        string_whole [ k ] = string_from [ j ];
+        k++;
+        j++;
+    }    
+
+//    printf ( "string_whole  : %s;\n", string_whole );
+
+    clear_string ( string_replaced );
+    strcpy ( string_replaced, string_whole );
 
 }
 
