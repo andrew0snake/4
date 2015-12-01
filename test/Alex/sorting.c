@@ -12,8 +12,6 @@ int get_note_number ( int pointer, char string [ MAXSIZE_STRING ] );
 void clear_string ( char string [ MAXSIZE_STRING ] );
 void clear_array ( int array [ MAX_NOTES_AMOUNT ] );
 void replacement_notes ( int true_note,  int pointer, int note_number, char string_from [ MAXSIZE_STRING ] , char string_whole [ MAXSIZE_STRING ] );
-void clear_string ( char string [] );
-void clear_array ( int array [ MAX_NOTES_AMOUNT ] );
 void itoa_my ( int digit, char string [ MAXSIZE_STRING ] ); 
 
 void main () {
@@ -75,7 +73,7 @@ void main () {
                 exit_check = 1;
             }
         };
-        string_number++;
+       string_number++;
         pointer = 0;
  
     }
