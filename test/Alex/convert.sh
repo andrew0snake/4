@@ -12,6 +12,7 @@ foo=`cat string`
 for (( i=0; i<${#foo}; i++ )); 
 do
    echo "'"${foo:$i:1}"'";
+   echo $i;
    echo "'"${foo:$i:1}"'">>string_tmp;
 done
 
