@@ -284,8 +284,10 @@ void itoa_my ( int digit, char string [ MAXSIZE_STRING ] ) {
     len = i;
     for ( j = 0; j <= len; j++, i-- ) {
         rev [ j ] = tmp [ i ];
-    }
- 
+    };
+    j++;
+    rev [ j ] = '\0';
+
     strcpy ( string, rev );
 
 }
@@ -353,6 +355,7 @@ int replace_same_note ( char string_same_note [ MAXSIZE_STRING ] ) {
     int k = 0;
     int start = 0;
     int position = 0;
+    int true_note_int = 0;
     int false_note_int = 0;
     short int found = 0;
 
@@ -419,7 +422,7 @@ int replace_same_note ( char string_same_note [ MAXSIZE_STRING ] ) {
 
     printf ( "Note found in position %d;\n", position ); 
 
-    return true_note;
+    return position;
 
 }
 
@@ -475,7 +478,9 @@ void replace_p ( int true_note, char string [ MAXSIZE_STRING ] ) {
     clear_string ( note_string );
     itoa_my ( true_note, note_string );
     j += strlen ( note_string );
-    strcpy ( full_string, note_string );
+    strcat ( full_string, note_string );
+//    j++;
+    full_string [ j ] = '\0';
     printf ( "2.i = %d;j = %d; full_string [ %d ] = %c; string [ %d ] = %c; true_note = %d;note_string:%s;full_string:%s;\n", i, j, j, full_string [ j ], i, string [ i ], true_note,  note_string, full_string );
 
     while ( string [ i ] != '<' ) {
