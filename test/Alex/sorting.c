@@ -285,7 +285,7 @@ void itoa_my ( int digit, char string [ MAXSIZE_STRING ] ) {
     for ( j = 0; j <= len; j++, i-- ) {
         rev [ j ] = tmp [ i ];
     };
-    j++;
+//    j++;
     rev [ j ] = '\0';
 
     clear_string ( string );
@@ -478,7 +478,7 @@ void replace_p ( int true_note, char string [ MAXSIZE_STRING ] ) {
   
     clear_string ( note_string );
     itoa_my ( true_note, note_string );
-//    printf ( "after itoa note_string:%s;\n", note_string );
+    printf ( "after itoa note_string:%s;\n", note_string );
     j += strlen ( note_string );
     strcat ( full_string, note_string );
 //    j++;
