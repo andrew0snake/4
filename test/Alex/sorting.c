@@ -13,6 +13,7 @@
     const char tmp_filename [ 9 ] = { 't','m','p','_','f','i','l','e' };
     const char string_section_id [ 18 ] = { ' ',' ','<','s','e','c','t','i','o','n',' ','i','d','=','"','n','_' };
     const char source_fb2 [ 13 ] = { 's','o','u','r','c','e','.','f','b','2' };
+    const char destination_fb2 [ 17 ] = { 'd','e','s','t','i','n','a','t','i','o','n','.','f','b','2' };
 
     int note_array [ MAX_NOTES_AMOUNT ];
     int note_array_length = 0;
@@ -63,6 +64,7 @@ void main () {
 
     remove ( dest_filename );
     remove ( tmp_filename );
+    remove ( destination_fb2 );
     clear_array ( note_array );
 
     if ( access ( source_fb2, F_OK) != -1 ) {
@@ -156,6 +158,8 @@ void main () {
 
        fclose ( source_file );
 //       printf ( "===================================================\n" );
+       printf ( "All tasks are successfully done.\n" );
+       remove ( tmp_filename );
     }
     else {
         printf ( "File \"source.fb2\" not found.\n" );
