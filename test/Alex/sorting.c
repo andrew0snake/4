@@ -12,6 +12,7 @@
 //    const char tmp_filename [ 8 ] = { 't', 'm', 'p', '_', 'f', 'i', 'l', 'e' };
     const char tmp_filename [ 9 ] = { 't','m','p','_','f','i','l','e' };
     const char string_section_id [ 18 ] = { ' ',' ','<','s','e','c','t','i','o','n',' ','i','d','=','"','n','_' };
+    const char source_fb2 [ 13 ] = { 's','o','u','r','c','e','.','f','b','2' };
 
     int note_array [ MAX_NOTES_AMOUNT ];
     int note_array_length = 0;
@@ -47,15 +48,13 @@ void main () {
     char string_repl [ MAXSIZE_STRING ];
     char string_concat [ MAXSIZE_STRING ];
 
-    clear_array ( note_array );
-
-    source_file = fopen ( "source_file", "r" );
     printf ( "=====================================================\n" );
     printf ( "=====================================================\n" );
+    printf ( "Please, rename file with wrong notes to \"source.fb2\"\n    and run this program to renumerate notes.\n" );
     printf ( "=====================================================\n" );
     printf ( "=====================================================\n" );
-    printf ( "strlen ( string_note ) =  %5lu;\n", strlen ( string_note ) );
-    printf ( "strlen ( string_notes ) = %5lu;\n", strlen ( string_notes ) );
+//    printf ( "strlen ( string_note ) =  %5lu;\n", strlen ( string_note ) );
+//    printf ( "strlen ( string_notes ) = %5lu;\n", strlen ( string_notes ) );
 
 /*
     In first while cycle we find and reorder notes in text of book.
@@ -64,93 +63,104 @@ void main () {
 
     remove ( dest_filename );
     remove ( tmp_filename );
+    clear_array ( note_array );
 
-    while ( fgets ( string_tmp, MAXSIZE_STRING, source_file ) != 0 ) {
-//        printf ( "getted string = %s;\n", string_tmp );
-        exit_check = 0;
-        while ( exit_check == 0 ) {
-            pointer = get_str_conj ( pointer + 1, string_tmp, string_note );
-           if ( pointer == -2 ) {
-                dest_file = fopen ( "tmp_file", "a+" );
-                fputs ( string_tmp, dest_file );
-                fclose ( dest_file );
-                exit_check = 1;
-            }
-            else {
-                if ( pointer > 0 ) {
-//                    printf ( "In string %d found note at position %d;\n", string_number, pointer );
-                    pointer_end = pointer + strlen ( string_note );
-                    note_number = get_note_number ( pointer, string_tmp );
-//                    printf ( "note = %d;true_note = %d;\n", note_number, i );
-                    note_array [ i ] = note_number;
-                    replacement_notes ( i, pointer_end, note_number, string_tmp, string_repl );   
-//                    printf ( "string with replaced note = %s;\n", string_repl );
-                    clear_string ( string_tmp );
-                    strcpy ( string_tmp, string_repl );    
-           
-                    i++;
-                }
-            
-                else {
+    if ( access ( source_fb2, F_OK) != -1 ) {
+        printf ( "File found, ok.\nPlease, wait while notes are replaced.\n" );
+    
+        source_file = fopen ( "source.fb2", "r" );
+ 
+        while ( fgets ( string_tmp, MAXSIZE_STRING, source_file ) != 0 ) {
+//            printf ( "getted string = %s;\n", string_tmp );
+            exit_check = 0;
+            while ( exit_check == 0 ) {
+                  pointer = get_str_conj ( pointer + 1, string_tmp, string_note );
+                if ( pointer == -2 ) {
                     dest_file = fopen ( "tmp_file", "a+" );
                     fputs ( string_tmp, dest_file );
                     fclose ( dest_file );
                     exit_check = 1;
+                }
+                else {
+                    if ( pointer > 0 ) {
+//                      printf ( "In string %d found note at position %d;\n", string_number, pointer );
+                      pointer_end = pointer + strlen ( string_note );
+                      note_number = get_note_number ( pointer, string_tmp );
+//                      printf ( "note = %d;true_note = %d;\n", note_number, i );
+                      note_array [ i ] = note_number;
+                      replacement_notes ( i, pointer_end, note_number, string_tmp, string_repl );   
+//                      printf ( "string with replaced note = %s;\n", string_repl );
+                      clear_string ( string_tmp );
+                      strcpy ( string_tmp, string_repl );    
+             
+                      i++;
+                    }
+              
+                    else {
+                        dest_file = fopen ( "tmp_file", "a+" );
+                        fputs ( string_tmp, dest_file );
+                        fclose ( dest_file );
+                        exit_check = 1;
+                    };
                 };
             };
-        };
-        string_number++;
-        pointer = 0;
- 
-    }
-
-    fclose ( source_file );
-    note_array_size = i;
-    note_array_length = i;
-    for ( j = 1; j < i; j++ ) {
-        printf ( "note_array [ %d ] = %d;\n", j, note_array [ j ] );
-
-    }
+            string_number++;
+            pointer = 0;
+   
+          }
+  
+          fclose ( source_file );
+          note_array_size = i;
+          note_array_length = i;
+//          for ( j = 1; j < i; j++ ) {
+  //            printf ( "note_array [ %d ] = %d;\n", j, note_array [ j ] );
+  //
+    //      }
 
 /* 
     In second part we search in notes section for same notes and replace false indexes with true from array
     
 */
 
-    source_file = fopen ( "tmp_file", "r" );
+        source_file = fopen ( "tmp_file", "r" );
 
-    i = 0;
-    while ( fgets ( string_tmp, MAXSIZE_STRING, source_file ) != 0 ) {
-//        printf ( "second search;\nstring is:%s;\n", string_tmp );
-        pointer = get_str_conj ( 0, string_tmp, section_id_string );
-        if ( pointer > 0 ) {
-            printf ( "section_id_string found on position %d;\n", pointer );
-            true_note = replace_same_note ( string_tmp );
+        i = 0;
+        while ( fgets ( string_tmp, MAXSIZE_STRING, source_file ) != 0 ) {
+//            printf ( "second search;\nstring is:%s;\n", string_tmp );
+            pointer = get_str_conj ( 0, string_tmp, section_id_string );
+            if ( pointer > 0 ) {
+//                printf ( "section_id_string found on position %d;\n", pointer );
+                true_note = replace_same_note ( string_tmp );
+    
+                dest_file = fopen ( "destination.fb2", "a+" );
+                fputs ( string_tmp, dest_file );
 
-            dest_file = fopen ( "dest_file", "a+" );
-            fputs ( string_tmp, dest_file );
+                clear_string ( string_tmp );
+                fgets ( string_tmp, MAXSIZE_STRING, source_file );
+                fputs ( string_tmp, dest_file );
 
-            clear_string ( string_tmp );
-            fgets ( string_tmp, MAXSIZE_STRING, source_file );
-            fputs ( string_tmp, dest_file );
+                clear_string ( string_tmp );
+                fgets ( string_tmp, MAXSIZE_STRING, source_file );
+                replace_p ( true_note, string_tmp );
+                fputs ( string_tmp, dest_file );
 
-            clear_string ( string_tmp );
-            fgets ( string_tmp, MAXSIZE_STRING, source_file );
-            replace_p ( true_note, string_tmp );
-            fputs ( string_tmp, dest_file );
-
-            fclose ( dest_file );
+                fclose ( dest_file );
+            }
+            else {
+                dest_file = fopen ( "destination.fb2", "a+");
+                fputs ( string_tmp, dest_file );
+                fclose ( dest_file);
+            }
+            i++;
         }
-        else {
-            dest_file = fopen ( "dest_file", "a+");
-            fputs ( string_tmp, dest_file );
-            fclose ( dest_file);
-        }
-        i++;
+
+       fclose ( source_file );
+//       printf ( "===================================================\n" );
+    }
+    else {
+        printf ( "File \"source.fb2\" not found.\n" );
     }
 
-   fclose ( source_file );
-   printf ( "===================================================\n" );
 
 }
 
@@ -378,7 +388,7 @@ int replace_same_note ( char string_same_note [ MAXSIZE_STRING ] ) {
         j++;
     };
     
-    printf ( "false_note string :%s;\n", false_note );
+//    printf ( "false_note string :%s;\n", false_note );
 
     false_note_int = atoi ( false_note );
 
@@ -419,9 +429,9 @@ int replace_same_note ( char string_same_note [ MAXSIZE_STRING ] ) {
     clear_string ( string_same_note );
     strcpy ( string_same_note, string_full );
 
-    printf ( "full string is:%s;\n", string_full );
+//    printf ( "full string is:%s;\n", string_full );
 
-    printf ( "Note found in position %d;\n", position ); 
+//    printf ( "Note found in position %d;\n", position ); 
 
     return position;
 
@@ -474,16 +484,16 @@ void replace_p ( int true_note, char string [ MAXSIZE_STRING ] ) {
     full_string [ j ] = string [ i ]; 
     i++;
     j++;
-    printf ( "1.i = %d;j = %d; full_string [ %d ] = %c; string [ %d ] = %c; full_string:%s;\n", i, j, j, full_string [ j ], i, string [ i ], full_string );
+//    printf ( "1.i = %d;j = %d; full_string [ %d ] = %c; string [ %d ] = %c; full_string:%s;\n", i, j, j, full_string [ j ], i, string [ i ], full_string );
   
     clear_string ( note_string );
     itoa_my ( true_note, note_string );
-    printf ( "after itoa note_string:%s;\n", note_string );
+//    printf ( "after itoa note_string:%s;\n", note_string );
     j += strlen ( note_string );
     strcat ( full_string, note_string );
 //    j++;
     full_string [ j ] = '\0';
-    printf ( "2.i = %d;j = %d; full_string [ %d ] = %c; string [ %d ] = %c; true_note = %d;note_string:%s;full_string:%s;\n", i, j, j, full_string [ j ], i, string [ i ], true_note,  note_string, full_string );
+//    printf ( "2.i = %d;j = %d; full_string [ %d ] = %c; string [ %d ] = %c; true_note = %d;note_string:%s;full_string:%s;\n", i, j, j, full_string [ j ], i, string [ i ], true_note,  note_string, full_string );
 
     while ( string [ i ] != '<' ) {
         i++;
@@ -501,7 +511,7 @@ void replace_p ( int true_note, char string [ MAXSIZE_STRING ] ) {
         string [ i ] = full_string [ i ];
         i++;
     };
-    printf ( "string with replaced p:%s;\n", string );
+//    printf ( "string with replaced p:%s;\n", string );
 }
 
 
