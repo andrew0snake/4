@@ -1,4 +1,5 @@
-#!/bin/bash
+#/bin/bash
+#!/usr/local/bin/bash
 
 #for i in `cat string|sed -e 's/\(.\)/\1\n/g'`
 #do 
