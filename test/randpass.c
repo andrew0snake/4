@@ -3,45 +3,77 @@
 
 #define MAXSIZE_STRING 10000
 
-int atoi_my ( char s [] );
+int atoi_my ( char s [ MAXSIZE_STRING ] );
 void getline_my ( char s [ MAXSIZE_STRING ] );
 void clear_string ( char string [ MAXSIZE_STRING ] );
 
-const char source [ 61 ] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','!','@','#','$','%','&','*','(',')','\0'};
+const char source [ 62 ] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','!','@','#','$','%','&','*','(',')','\0'};
 
 void main () {
  
     int i = 0;
-    int j = 0;
+    int len_pass = 0;
+    int size_int = 0;
+    char endurance = 0;
+    char exit = 0;
+    short int len_endur = 0;
     char size [ MAXSIZE_STRING ];
+    char password [ MAXSIZE_STRING ];
 
-    clear_string ( size );
-    printf ( "Input number: ");
-    getline_my ( size );
-    printf ( "getted string :%s;\n", size );
-    i = atoi_my ( size );
-    printf ( "Your number is %d;\n", i );
+    while ( exit == 0 ) {
+        clear_string ( size );
+        printf ( "Input lenght of password: ");
+        getline_my ( size );
+        len_pass = atoi_my ( size );
+ 
+        if ( len_pass < 1 ) {
+            printf ( "Wrong number, try again. " );
+            exit = 0;
+        }
+        else {
+            printf ( "Lenght of password = %d;\n", len_pass );
+            exit = 1;
+        };
+    };
+    getchar ();
 
-/*    for ( j = 'a'; j <= 'z'; j++ ) {
-        printf ( "'%c',", j );
+    printf ( "What kind of endurance of password& Strong ( s ) of easy ( e )?\n" );
+    exit = 0;
+    while ( exit == 0 ) {
+        endurance = getchar ( );
+        printf ( "start\n" );
+        if ( endurance == 's' ) {
+            len_endur = 60;
+            exit = 1;
+            printf ( "first if\n" ); 
+            getchar ();
+        }
+        else {
+            printf ( "first else\n" );
+            if ( endurance == 'e' ) {
+                len_endur = 51;
+                exit = 1;
+                printf ( "second if\n" ); 
+                getchar ();
+ 
+            }
+            else {
+                printf ( "second else\n" );
+                printf ( "Wrong input, try again.\n" );
+                exit = 0;
+                endurance = 0;
+//                getchar ();
+            };
+        };
+    };   
+
+    for ( i = 0; i < len_pass; i++ ) {
+        password [ len_pass ] = rand ( ) % len_endur; 
+
 
     };
-    for ( j = 'A'; j <= 'Z'; j++ ) {
-        printf ( "'%c',", j );
-
-    };
-    printf ( "\n" );
-
-    for ( j = 1; j <= 100; j++ ) {
-        printf ( "j = %d = %c;\n", j, j );
-    };
-  */
-    j = 0;
-    while ( ' && j < strlen (source ) ) {
-        printf ( "source [ j ] = %c; j = %d;\n", source [ j ], j );
-        j++;
-    };
-    printf ( "lenght of string source = %d;\n", strlen ( source ) );
+    password [ i ] = '\0';
+    printf ( "Getted password = %s;\n", password );
 
 }
 
@@ -57,7 +89,7 @@ void clear_string ( char string [ MAXSIZE_STRING ] ) {
 
 }
 
-void getline_my ( char s [] ) {
+void getline_my ( char s [ MAXSIZE_STRING ] ) {
 
     int c = 0;
     int i = 0;
@@ -76,7 +108,7 @@ void getline_my ( char s [] ) {
 
 }
 
-int atoi_my ( char s [] )
+int atoi_my ( char s [ MAXSIZE_STRING ] )
 
 {
     int i = 0;
