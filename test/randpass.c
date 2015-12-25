@@ -6,8 +6,10 @@
 int atoi_my ( char s [ MAXSIZE_STRING ] );
 void getline_my ( char s [ MAXSIZE_STRING ] );
 void clear_string ( char string [ MAXSIZE_STRING ] );
+//int gen_rand ( int argc, char **argv, int size );
+int gen_rand ( int size );
 
-const char source [ 71 ] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','!','@','#','$','%','&','*','(',')','!','@','#','$','%','&','*','(',')','\0'};
+const char source [ 82 ] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9','0','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','!','@','#','$','%','&','*','(',')','!','@','#','$','%','&','*','(',')'};
 
 void main () {
  
@@ -44,7 +46,7 @@ void main () {
         getline_my ( endurance );
 //        printf ( "start\n" );
         if ( endurance [ 0 ] == 's' ) {
-            len_endur = 70;
+            len_endur = 80;
             exit = 1;
 //            printf ( "first if\n" ); 
 //            getchar ();
@@ -52,7 +54,7 @@ void main () {
         else {
 //            printf ( "first else\n" );
             if ( endurance [ 0 ]  == 'm' ) {
-                len_endur = 51;
+                len_endur = 61;
                 exit = 1;
 //                printf ( "second if\n" ); 
 //                getchar ();
@@ -61,7 +63,7 @@ void main () {
             else {
 //                printf ( "second else\n" );
                 if ( endurance [ 0 ] = 'e') {
-                    len_endur = 25;
+                    len_endur = 35;
                     exit = 1;
                 }
                 else {
@@ -77,13 +79,14 @@ void main () {
 //    printf ( "After check len_endur = %d;\n", len_endur );
     for ( i = 0; i < len_pass; i++ ) {
         
-        tmp = rand ( ) % len_endur; 
+        tmp = gen_rand (  len_endur ); 
         password [ i ] = source [ tmp ];
+//        password [ i ] = source [ tmp ];
         tmp = 0;
 
     };
     password [ i ] = '\0';
-    printf ( "Getted string = %s;\n", password );
+    printf ( "Getted string = %s\n", password );
 
 }
 
@@ -137,4 +140,25 @@ int atoi_my ( char s [ MAXSIZE_STRING ] )
     return sign * n;
 
 }
+
+//int gen_rand ( int argc, char **argv, int size ) {
+int gen_rand ( int size ) {
+
+    unsigned int randval;
+    FILE *f;
+ 
+    f = fopen ( "/dev/random", "r" );
+    fread ( &randval, sizeof ( randval ), 1, f );
+    fclose ( f );
+ 
+    while ( randval > size ) {
+        randval /= 5;
+
+
+    }
+
+    printf ( "%u\n", randval );
+
+    return randval;
+ }
 
