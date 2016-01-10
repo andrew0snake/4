@@ -13,6 +13,7 @@ int sp = 0; //stack pointer
 double val [ MAXVAL ]; //stack of values
 char buf [ BUFSIZE ]; //buffer for ungetch
 int bufp = 0; //next free position for ungetch
+char command [ BUFSIZE ];
 
 int getop ( char [] );
 void push_my ( double );
@@ -21,8 +22,8 @@ double pop ( void );
 int getch ( void );
 void ungetch ( int );
 int getop ( char s [] );
-int double2int ( double );
-
+void clear_string ( char string [] );
+unsigned short int isletter ( char c );
 
 void main ()
 
@@ -78,6 +79,9 @@ void main ()
         case '\n':
             printf ( "Result = %.8g; neg = %d;\n", pop (), neg );
             break;
+        case 0:
+            printf ( "Wrong input, symbol(s) is not command, function or value. May be you will try again?\n" );
+            break;
         default:
             printf ( "Error, unknown operation %s.\n", s );
             break;
@@ -125,7 +129,18 @@ int getop ( char s [] )
     s [ 1 ] = '\0';
     
     if ( ! isdigit ( c ) && c != '.' ){
+        if ( c == '=' || c == '\n' ) {
         return c; /* is not a number */
+        }
+        else {
+            if ( isletter ( c ) ) {
+                printf ( "The result of isletter = %d;\n", isletter ( c ) );
+                return c;
+            }
+            else {
+                return 0;
+            }
+        }
     };
     i = 0;
     
@@ -166,33 +181,29 @@ void ungetch ( int c )
 }
 
 
-int double2int ( double source) {
+void clear_string ( char string [] ) {
 
     int i = 0;
-    int dest = 0;
-    double per = 0;
-  
 
-    if ( source > 0 ) {
-        if ( source < 0.5 )
-            dest = 0;
-        else {
-            if ( source >= 0.5 && source <=1 )
-                dest = 1;
-            else {
-                per = source;
-                while ( per >= 1.0 ){
-                    per = per / 10;
-                    
-                    
-                    
-                }
-                    
-            }
-        }
-    
+    while ( i < BUFSIZE ) {
+        string [ i ] = 0;
+
+
+    };
+
+}
+
+
+unsigned short int isletter ( char c ) {
+
+    int i = 0;
+
+    if ( ( c == 'a' ) || ( c == 'b' ) || ( c == 'c' ) || ( c == 'd' ) || ( c == 'e' ) || ( c == 's' ) || ( c == 'p' ) ) {
+        return 1;
     }
-
+    else {
+        return 0;
+    }
 
 
 }
