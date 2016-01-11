@@ -3,8 +3,10 @@
 #include <ctype.h>
 
 #define MAXOP 100
-#define NUMBER '0'
+#define NUMBER_0 '0'
+#define NUMBER_1 '1'
 #define MAXVAL 100
+#define MAXSIZE 1000
 
 #define BUFSIZE 100
 
@@ -15,6 +17,10 @@ char buf [ BUFSIZE ]; //buffer for ungetch
 int bufp = 0; //next free position for ungetch
 char command [ BUFSIZE ];
 unsigned short int com_p;
+double val_a;
+double val_b;
+double val_c;
+double val_d;
 
 int getop ( char [] );
 void push_my ( double );
@@ -23,7 +29,7 @@ double pop ( void );
 int getch ( void );
 void ungetch ( int );
 int getop ( char s [] );
-void clear_string ( char string [] );
+void clear_string ( char string [ MAXSIZE ] );
 unsigned short int isletter ( char c );
 
 void main ()
@@ -35,10 +41,17 @@ void main ()
     char s [ MAXOP ];
  
     com_p = 0; 
+    val_a = 0.0;
+    val_b = 0.0;
+    val_c = 0.0;
+    val_d = 0.0;
+
+    printf ( "\nThis is polish notation calculator.\nIn it you can use binary functions '+', '-', '*', '/', ' % ' .\n" );
+    printf ( "Also in it may be used values 'a', 'b', 'c', 'd';\n" );
 
     while ( ( type = getop ( s ) ) != EOF ){
         switch ( type ){
-        case NUMBER:
+        case NUMBER_0:
             if ( neg == 0 ) {
 	        printf ( "push in stack %lf; neg = %d;\n", atof ( s ), neg );
             }
@@ -80,7 +93,10 @@ void main ()
             push_my ( ( ( int )  pop () ) % op2_int );
             break;
         case '\n':
-            printf ( "Result = %.8g; neg = %d;\n", pop (), neg );
+            printf ( "\nResult = %.8g; neg = %d;\n", pop (), neg );
+            break;
+        case NUMBER_1:
+            printf ( "Getted values:\na = %f, b = %f, c = %f, d = %f.\n" );
             break;
         case 0:
             printf ( "Wrong input, symbol(s) is not command, function or value. May be you will try again?\n" );
@@ -90,7 +106,7 @@ void main ()
             break;
         };
     };
-}
+};
 
 
 void push_my ( double f )
@@ -126,19 +142,44 @@ int getop ( char s [] )
 {
     int i = 0;
     int c = 0;
+    char tmp_str [ MAXSIZE ];
     
     while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
         ;
     s [ 1 ] = '\0';
     
     if ( ! isdigit ( c ) && c != '.' ){
-        if ( c == '=' || c == '\n' || c == EOF ) {
+        if ( c == '=' || c == '\n' || c == EOF || c == '%' || c == '+' || c == '-' || c == '*' || c == '/' ) {
         return c; /* is not a number */
         }
         else {
             if ( isletter ( c ) ) {
                 printf ( "The result of isletter = %d;\n", isletter ( c ) );
-                return c;
+                if ( com_p == 0 && c == 'a' ) {
+                    clear_string ( tmp_str );
+                    tmp_str [ 0 ] = c;
+                    tmp_str [ 1 ] = '\0';
+                    val_a = atof ( c );
+                }
+                else {
+                    if ( com_p == 0 && c == 'b' ) {
+                        val_b = atof ( c );
+                    }
+                    else {
+                        if ( com_p == 0 && c == 'c' ) {
+                           val_c = atof ( c );
+                        }
+                        else {
+                            if ( com_p == 0 && c == 'd' ) {
+                                val_d = atof ( c );
+                            }
+                            else {
+                                command [ com_p++ ] = c;
+                            };
+                        };
+                    };
+                };
+                return NUMBER_1;
             }
             else {
                 return 0;
@@ -162,7 +203,7 @@ int getop ( char s [] )
     if ( c != EOF )
         ungetch ( c );
     printf ( "Whole string is:%s;\n", s );    
-    return NUMBER;
+    return NUMBER_0;
 
 }
 
