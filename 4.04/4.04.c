@@ -14,6 +14,7 @@ double val [ MAXVAL ]; //stack of values
 char buf [ BUFSIZE ]; //buffer for ungetch
 int bufp = 0; //next free position for ungetch
 char command [ BUFSIZE ];
+unsigned short int com_p;
 
 int getop ( char [] );
 void push_my ( double );
@@ -33,6 +34,8 @@ void main ()
     double op2 = 0;
     char s [ MAXOP ];
  
+    com_p = 0; 
+
     while ( ( type = getop ( s ) ) != EOF ){
         switch ( type ){
         case NUMBER:
@@ -129,7 +132,7 @@ int getop ( char s [] )
     s [ 1 ] = '\0';
     
     if ( ! isdigit ( c ) && c != '.' ){
-        if ( c == '=' || c == '\n' ) {
+        if ( c == '=' || c == '\n' || c == EOF ) {
         return c; /* is not a number */
         }
         else {
@@ -198,7 +201,7 @@ unsigned short int isletter ( char c ) {
 
     int i = 0;
 
-    if ( ( c == 'a' ) || ( c == 'b' ) || ( c == 'c' ) || ( c == 'd' ) || ( c == 'e' ) || ( c == 's' ) || ( c == 'p' ) ) {
+    if ( ( c == 'a' ) || ( c == 'b' ) || ( c == 'c' ) || ( c == 'd' ) || ( c == 'e' ) || ( c == 'i' ) || ( c == 'n' ) || ( c == 'o' ) || ( c == 'p' ) || ( c == 's' ) || ( c == 'w') ) {
         return 1;
     }
     else {
