@@ -17,6 +17,7 @@ char buf [ BUFSIZE ]; //buffer for ungetch
 int bufp = 0; //next free position for ungetch
 char command [ BUFSIZE ];
 unsigned short int com_p;
+unsigned short int eq_p;
 double val_a;
 double val_b;
 double val_c;
@@ -47,6 +48,7 @@ void main ()
     char s [ MAXOP ];
  
     com_p = 0; 
+    eq_p = 0;
     val_a = 0.0;
     val_b = 0.0;
     val_c = 0.0;
@@ -102,6 +104,9 @@ void main ()
         case '%':
             op2_int = ( int )  pop ();
             push_my ( ( ( int )  pop () ) % op2_int );
+            break;
+        case '=':
+            eq_p = 1;
             break;
         case '\n':
             printf ( "\nResult = %.8g; neg = %d;\n", pop (), neg );
@@ -167,13 +172,7 @@ int getop ( char s [] )
             if ( isletter ( c ) ) {
                 printf ( "The result of isletter = %d;\n", isletter ( c ) );
                 if ( val_a_p == 0 && c == 'a' ) {
-                    printf ( "1 check.\n" );
-                    clear_string ( tmp_str );
-                    tmp_str [ 0 ] = c;
-                    tmp_str [ 1 ] = '\0';
-                    printf ( "2 check. tmp_str = %s\n", tmp_str );
-                    val_a_p = 1;
-                    printf ( "3 check. val_a = %f.\n", val_a );
+                   val_a_p = 1;
                 }
                 else {
                     if ( val_b_p == 0 && c == 'b' ) {
@@ -188,6 +187,9 @@ int getop ( char s [] )
                                 val_d_p = 1;
                             }
                             else {
+                                if ( val_a_p == 1 && c == 'a' ) {
+                                     
+                                }
                                 command [ com_p++ ] = c;
                             };
                         };
