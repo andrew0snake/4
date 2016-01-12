@@ -22,6 +22,12 @@ double val_b;
 double val_c;
 double val_d;
 
+int val_a_p;
+int val_b_p;
+int val_c_p;
+int val_d_p;
+
+
 int getop ( char [] );
 void push_my ( double );
 double pop ( void );
@@ -46,8 +52,13 @@ void main ()
     val_c = 0.0;
     val_d = 0.0;
 
-    printf ( "\nThis is polish notation calculator.\nIn it you can use binary functions '+', '-', '*', '/', ' % ' .\n" );
-    printf ( "Also in it may be used values 'a', 'b', 'c', 'd';\n" );
+    val_a_p = 0;
+    val_b_p = 0;
+    val_c_p = 0;
+    val_d_p = 0;
+
+    printf ( "\nThis is polish notation calculator.\nIn it you can use binary functions '+', '-', '*', '/', '%%'.\n" );
+    printf ( "Also in it may be used values 'a', 'b', 'c', 'd'; values are using by expression a = 5 \"enter\";\n" );
 
     while ( ( type = getop ( s ) ) != EOF ){
         switch ( type ){
@@ -155,23 +166,26 @@ int getop ( char s [] )
         else {
             if ( isletter ( c ) ) {
                 printf ( "The result of isletter = %d;\n", isletter ( c ) );
-                if ( com_p == 0 && c == 'a' ) {
+                if ( val_a_p == 0 && c == 'a' ) {
+                    printf ( "1 check.\n" );
                     clear_string ( tmp_str );
                     tmp_str [ 0 ] = c;
                     tmp_str [ 1 ] = '\0';
-                    val_a = atof ( c );
+                    printf ( "2 check. tmp_str = %s\n", tmp_str );
+                    val_a_p = 1;
+                    printf ( "3 check. val_a = %f.\n", val_a );
                 }
                 else {
-                    if ( com_p == 0 && c == 'b' ) {
-                        val_b = atof ( c );
+                    if ( val_b_p == 0 && c == 'b' ) {
+                        val_b_p = 1;
                     }
                     else {
-                        if ( com_p == 0 && c == 'c' ) {
-                           val_c = atof ( c );
+                        if ( val_c_p == 0 && c == 'c' ) {
+                           val_c_p = 1;
                         }
                         else {
-                            if ( com_p == 0 && c == 'd' ) {
-                                val_d = atof ( c );
+                            if ( val_d_p == 0 && c == 'd' ) {
+                                val_d_p = 1;
                             }
                             else {
                                 command [ com_p++ ] = c;
@@ -179,6 +193,7 @@ int getop ( char s [] )
                         };
                     };
                 };
+                printf ( "End of check cycle.\n" );
                 return NUMBER_1;
             }
             else {
@@ -225,14 +240,13 @@ void ungetch ( int c )
 }
 
 
-void clear_string ( char string [] ) {
+void clear_string ( char string [ MAXSIZE ] ) {
 
     int i = 0;
 
-    while ( i < BUFSIZE ) {
+    while ( i < MAXSIZE ) {
         string [ i ] = 0;
-
-
+        i++;
     };
 
 }
