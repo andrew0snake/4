@@ -18,6 +18,8 @@ int bufp = 0; //next free position for ungetch
 char command [ BUFSIZE ];
 unsigned short int com_p;
 unsigned short int eq_p;
+unsigned short int ex_val;
+
 double val_a;
 double val_b;
 double val_c;
