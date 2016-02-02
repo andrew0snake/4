@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
+#include <string.h>
 
 #define MAXOP 100
 //if rezult of recognizing of string is digit returning value is '0'
@@ -80,6 +81,7 @@ void put_values_in_stack ( void );
 void put_pre_last_value_in_stack ( void );
 void def_last_val ( unsigned short int );
 void def_pre_last_val ( unsigned short int );
+void push_last_val ( unsigned short int );
 
 void main ()
 
@@ -186,15 +188,39 @@ void main ()
         case '\n':
             printf ( "\nResult = %.8g; neg = %d;\n", pop (), neg );
             printf ( "Values:\na = %f, b = %f, c = %f, d = %f, last_val = %d, pre_last_val = %d.\n", val_a, val_b, val_c, val_d, last_val, pre_last_val );
-
             break;
         case NUMBER_1:
-            printf ( "Getted values:\na = %f, b = %f, c = %f, d = %f.\n", val_a, val_b, val_c, val_d );
+            printf ( "Getted values:\na = %f, b = %f, c = %f, d = %f.sp = %d\n", val_a, val_b, val_c, val_d, sp );
+//            push_my ( val_a );
+            break;
+        case NUMBER_2:
+            printf ( "Getted values:\na = %f, b = %f, c = %f, d = %f.sp = %d\n", val_a, val_b, val_c, val_d, sp );
+//            push_my ( val_b );
+            break;
+        case NUMBER_3:
+            printf ( "Getted values:\na = %f, b = %f, c = %f, d = %f.sp = %d\n", val_a, val_b, val_c, val_d, sp );
+//            push_my ( val_c );
+            break;
+        case NUMBER_4:
+             printf ( "Getted values:\na = %f, b = %f, c = %f, d = %f.sp = %d\n", val_a, val_b, val_c, val_d, sp );
+//            push_my ( val_d );
             break;
         case NUMBER_5:
+            if ( sp == 0 && last_val > 0 )
+                push_last_val ( last_val );
             op2 = pop ();
             push_my ( sin ( op2 ) );
             op2 = 0; 
+            break;
+        case NUMBER_6:
+            printf ( "operation exp. sp = %d;\n", sp );
+            if ( sp == 0 && last_val > 0 ) {
+                push_last_val (last_val );
+                printf ( "sp = 0 and last_val = %d;\n", last_val );
+            };
+            op2 = pop (); 
+            push_my ( exp ( op2 ) );
+            op2 = 0;
             break;
         case 0:
             printf ( "Wrong input, symbol(s) is not command, function or value. May be you will try again?\n" );
@@ -288,7 +314,7 @@ int getop ( char s [] )
                     };
                 }
                 if ( rez >= NUMBER_1 ) {
-                    if ( rez <=NUMBER_4 )
+                    if ( rez <=NUMBER_4 ) {
                         if ( rez == NUMBER_1 ) {
                             last_val = 1;
 //                            printf ( "last_val in if = %d;\n", last_val );
@@ -307,6 +333,7 @@ int getop ( char s [] )
                                     };
 //                    printf ( "last_val = %d;\n", last_val );
                     return rez;
+                    }
                 }
                 else {
                     return 0;
@@ -653,12 +680,12 @@ void put_values_in_stack ( void ) {
 void def_last_val ( unsigned short int rez ) {
 
     if ( rez >= NUMBER_1 ) {
-        if ( rez <=NUMBER_4 )
+        if ( rez <=NUMBER_4 ) {
             if ( rez == NUMBER_1 ) {
                 last_val = 1;
 //              printf ( "last_val in if = %d;\n", last_val );
             }
-            else 
+            else {
                 if ( rez == NUMBER_2 ) {
                     last_val = 2;
                 }
@@ -670,7 +697,9 @@ void def_last_val ( unsigned short int rez ) {
                         if ( rez == NUMBER_4 ) {
                             last_val = 4;
                         };
-
+            }
+        }
+        
     }
 }
 
@@ -678,7 +707,7 @@ void def_last_val ( unsigned short int rez ) {
 void def_pre_last_val ( unsigned short int rez ) {
 
     if ( rez >= NUMBER_1 ) {
-        if ( rez <=NUMBER_4 )
+        if ( rez <=NUMBER_4 ) {
             if ( rez == NUMBER_1 ) {
                 pre_last_val = last_val;
                 last_val = 1;
@@ -699,6 +728,29 @@ void def_pre_last_val ( unsigned short int rez ) {
                             pre_last_val = last_val;
                             last_val = 4;
                         };
+        }
 
     }
 }
+
+
+void push_last_val ( unsigned short int lv ) {
+
+    if ( lv == 1 )
+        push_my ( val_a );
+
+    if ( lv == 2 )
+        push_my ( val_b );
+
+    if ( lv == 3 )
+        push_my ( val_c );
+
+    if ( lv == 4 )
+        push_my ( val_d );
+
+
+}
+
+
+
+
