@@ -3,8 +3,19 @@
 #include <ctype.h>
 
 #define MAXOP 100
-#define NUMBER_0 '0'
 #define MAXVAL 100
+#define NUMBER_0 '0'
+#define NUMBER_1 '1'
+#define NUMBER_2 '2'
+#define NUMBER_3 '3'
+#define NUMBER_4 '4'
+#define NUMBER_5 '5'
+#define NUMBER_6 '6'
+#define NUMBER_7 '7'
+#define NUMBER_8 '8'
+#define NUMBER_0 '9'
+
+
 
 #define BUFSIZE 100
 
@@ -14,6 +25,9 @@ int sp = 0; //stack pointer
 double val [ MAXVAL ]; //stack of values
 char buf [ BUFSIZE ]; //buffer for ungetch
 int bufp = 0; //next free position for ungetch
+
+char string_symb [ MAXVAL ];
+unsigned short int str_symb_p;
 //-----------values
 
 //-----------functions
@@ -27,6 +41,7 @@ int getop ( char s [] );
 int double2int ( double );
 unsigned short int isoperand ( char symb );
 unsigned short int isletter ( char symb );
+void clear_string ( char string [ MAXVAL ] );
 //-----------functions
 
 void main ()
@@ -40,11 +55,17 @@ void main ()
 
     printf ( "---------------------------------------------------------------------------------------------\n");
     printf ( "This is polish notation calculator.\nIn it you can use binary functions '+', '-', '*', '/', '%%'.\n" );
-    printf ( "Also in it may be used values 'a', 'b', 'c', 'd'; values are using by expression \"a 5 = \" and \"enter\".\n" );
+//    printf ( "Also in it may be used values 'a', 'b', 'c', 'd'; values are using by expression \"a 5 = \" and \"enter\".\n" );
+    printf ( "In it you may use next comands:\n" );
+    printf ( "ph - print higher element in stack ( with safeleeping this element in stack ).\n" );
+    printf ( "db - double element in stack.\n" );
+    printf ( "sw - switch two higher elements in stack.\n" );
+    printf ( "cs - clear stack.\n" );
     printf ( "And also it's possible to use a functions sin, exp and pow in syntax \"4 pow\" \"enter\".\n" );
     printf ( "---------------------------------------------------------------------------------------------\n\n");
 
-
+    clear_string ( string_symb );
+    str_symb_p = 0;
  
     while ( ( type = getop ( s ) ) != EOF ){
         switch ( type ){
@@ -80,6 +101,9 @@ void main ()
             break;
         case '\n':
             printf ( "Result = %.8g; neg = %d;\n", pop (), neg );
+            break;
+        case 0:
+            printf ( "Wrong input,may you try again?\n" );
             break;
         default:
             printf ( "Error, unknown operation %s.\n", s );
@@ -161,11 +185,23 @@ int getop ( char s [] )
         }
         else {
             if ( isletter ( c ) ) {
-
+                string_symb [ 0 ] = c;
+                string_symb [ 1 ] = '\0';
+                symb_str_p = 0;
+                if ( recogn_string ( string_symb ) > 0 ) {
+                    
+                }
+                else {
+                    while ( isletter ( string_symb [ symb_str_p ++ ] = c = getch () ) )
+                    ;
+                }  
             }
             else {
                 if ( c == EOF ) {
-//                    return 
+                    return ( -1 ); 
+                }
+                else {
+                    return 0; 
                 };
             }
         }      
@@ -205,4 +241,15 @@ unsigned short int isletter ( char symb ) {
    else
        return 0;
 }
+
+void clear_string ( char string [ MAXVAL ] ) {
+
+    int i = 0;
+
+    for ( i = 0; i < MAXVAL; i++ ) {
+        string [ i ] = 0;
+    };
+
+}
+
 
