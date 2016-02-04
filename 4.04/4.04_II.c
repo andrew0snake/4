@@ -28,6 +28,14 @@ int bufp = 0; //next free position for ungetch
 
 char string_symb [ MAXVAL ];
 unsigned short int str_symb_p;
+unsigned short int last_val = 0;
+unsigned short int pre_last_val = 0;
+
+double val_a;
+double val_b;
+double val_c;
+double val_d;
+
 //-----------values
 
 //-----------functions
@@ -42,6 +50,9 @@ int double2int ( double );
 unsigned short int isoperand ( char symb );
 unsigned short int isletter ( char symb );
 void clear_string ( char string [ MAXVAL ] );
+unsigned short int recogn_string ( char string [ MAXVAL ] );
+void def_last_val ( unsigned short int match );
+void def_pre_last_val ( unsigned short int match );
 //-----------functions
 
 void main ()
@@ -57,7 +68,7 @@ void main ()
     printf ( "This is polish notation calculator.\nIn it you can use binary functions '+', '-', '*', '/', '%%'.\n" );
 //    printf ( "Also in it may be used values 'a', 'b', 'c', 'd'; values are using by expression \"a 5 = \" and \"enter\".\n" );
     printf ( "In it you may use next comands:\n" );
-    printf ( "ph - print higher element in stack ( with safeleeping this element in stack ).\n" );
+    printf ( "ph - print higher element in stack ( with safekeeping this element in stack ).\n" );
     printf ( "db - double element in stack.\n" );
     printf ( "sw - switch two higher elements in stack.\n" );
     printf ( "cs - clear stack.\n" );
@@ -100,7 +111,7 @@ void main ()
             push_my ( ( ( int )  pop () ) % op2_int );
             break;
         case '\n':
-            printf ( "Result = %.8g; neg = %d;\n", pop (), neg );
+            printf ( "Result = %.8g; neg = %d; sp = %d.\n", pop (), neg, sp );
             break;
         case 0:
             printf ( "Wrong input,may you try again?\n" );
@@ -152,6 +163,7 @@ int getop ( char s [] )
 {
     int i = 0;
     int c = 0;
+    unsigned short int match = 0;
     
     while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
         ;
@@ -180,21 +192,29 @@ int getop ( char s [] )
         return NUMBER_0;
     }
     else {
-        if ( isoperand ( c ) ) {
+        if ( isoperand ( c ) || c == '\n' ) {
             return c;
         }
         else {
             if ( isletter ( c ) ) {
                 string_symb [ 0 ] = c;
                 string_symb [ 1 ] = '\0';
-                symb_str_p = 0;
-                if ( recogn_string ( string_symb ) > 0 ) {
-                    
+                str_symb_p = 1;
+                match = 0;
+                if ( ( match = recogn_string ( string_symb ) ) > 0 ) {
+                    if ( last_val > 0 ) {
+                        def_pre_last_val ( match);   
+                    }
+                    else {
+                        def_last_val ( match );
+                    };
                 }
                 else {
-                    while ( isletter ( string_symb [ symb_str_p ++ ] = c = getch () ) )
-                    ;
-                }  
+                    match = 0;
+                    while ( isletter ( string_symb [ str_symb_p ++ ] = c = getch () ) || match < 1 ){
+                        match = recogn_string ( string_symb );
+                    };    
+                };  
             }
             else {
                 if ( c == EOF ) {
@@ -249,6 +269,103 @@ void clear_string ( char string [ MAXVAL ] ) {
     for ( i = 0; i < MAXVAL; i++ ) {
         string [ i ] = 0;
     };
+
+}
+
+unsigned short int recogn_string ( char string [ MAXVAL ] ) {
+
+    char ph [ MAXVAL ] = "ph"; 
+    char sw[ MAXVAL ] = "sw"; 
+    char cs [ MAXVAL ] = "cs"; 
+    char sin [ MAXVAL ] = "sin"; 
+    char exp [ MAXVAL ] = "exp"; 
+    char pow [ MAXVAL ] = "pow"; 
+    char a [ MAXVAL ] = "a"; 
+    char b [ MAXVAL ] = "b"; 
+    char c [ MAXVAL ] = "c"; 
+    char d [ MAXVAL ] = "d"; 
+
+    int i = 0;
+
+    if ( strcmp ( string, a ) == 0 ) {
+        str_symb_p = 0;
+        return 1;
+    }
+    else {
+        if ( strcmp ( string, b ) == 0 ) {
+            str_symb_p = 0;
+            return 2;
+        }
+        else {
+            if ( strcmp ( string, c ) == 0 ) {
+                str_symb_p = 0;
+                return 3;
+            }
+            else {
+                if ( strcmp ( string, d ) == 0 ) {
+                    str_symb_p = 0;
+                    return 4;
+                }
+                else {
+                    if ( strcmp ( string, ph ) == 0 ) {
+                        str_symb_p = 0;
+                        return 5;
+                    }
+                    else {
+                        if ( strcmp ( string, sw ) == 0 ) {
+                            str_symb_p = 0;
+                            return 6;
+                        }
+                        else {
+                            if ( strcmp ( string, cs ) == 0 ) {
+                                str_symb_p = 0;
+                                return 7;
+                            }
+                            else {
+                                if ( strcmp ( string, sin ) == 0 ) {
+                                    str_symb_p = 0;
+                                    return 8;
+                                }
+                                else {
+                                    if ( strcmp ( string, exp ) == 0 ) {
+                                         str_symb_p = 0;
+                                         return 9;
+                                    }
+                                    else {
+                                        if ( strcmp ( string, pow ) == 0 ) {
+                                            str_symb_p = 0;
+                                            return 10;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void def_last_val ( unsigned short int match ) {
+
+    if ( match == 1 ) {
+        val_a = 
+    }    
+
+
+
+
+}
+
+void def_pre_last_val ( unsigned short int match ) {
+
+    if ( match == 1 ) {
+        val_a = 
+    }    
+
+
+
 
 }
 
