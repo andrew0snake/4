@@ -203,7 +203,7 @@ int getop ( char s [] )
                 match = 0;
                 if ( ( match = recogn_string ( string_symb ) ) > 0 ) {
                     if ( last_val > 0 ) {
-                        def_pre_last_val ( match);   
+                        def_pre_last_val ( match );   
                     }
                     else {
                         def_last_val ( match );
@@ -213,7 +213,10 @@ int getop ( char s [] )
                     match = 0;
                     while ( isletter ( string_symb [ str_symb_p ++ ] = c = getch () ) || match < 1 ){
                         match = recogn_string ( string_symb );
+                        printf ( "Got it!)\n" );
                     };    
+//                    if ()
+
                 };  
             }
             else {
@@ -275,7 +278,7 @@ void clear_string ( char string [ MAXVAL ] ) {
 unsigned short int recogn_string ( char string [ MAXVAL ] ) {
 
     char ph [ MAXVAL ] = "ph"; 
-    char sw[ MAXVAL ] = "sw"; 
+    char sw [ MAXVAL ] = "sw"; 
     char cs [ MAXVAL ] = "cs"; 
     char sin [ MAXVAL ] = "sin"; 
     char exp [ MAXVAL ] = "exp"; 
@@ -336,6 +339,9 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
                                             str_symb_p = 0;
                                             return 10;
                                         }
+                                        else {
+                                            return 0;
+                                        }
                                     }
                                 }
                             }
@@ -350,23 +356,54 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
 void def_last_val ( unsigned short int match ) {
 
     if ( match == 1 ) {
-        val_a = 
+        last_val = 1;
     }    
-
-
-
-
+    else {
+        if ( match == 2 ) {
+            last_val = 2;
+        }    
+        else {
+            if ( match == 3 ) {
+                last_val = 3;
+            }    
+            else {
+                if ( match == 4 ) {
+                    last_val = 4;
+                }                
+            }    
+        }
+    }
 }
 
 void def_pre_last_val ( unsigned short int match ) {
 
     if ( match == 1 ) {
-        val_a = 
+        pre_last_val = last_val;
+        last_val = 1;
     }    
-
-
-
-
+    else {
+        if ( match == 2 ) {
+            pre_last_val = last_val;
+            last_val = 2;
+        }    
+        else {
+            if ( match == 3 ) {
+               pre_last_val = last_val;
+               last_val = 3;
+            }    
+            else {
+                if ( match == 4 ) {
+                  pre_last_val = last_val;
+                  last_val = 4;
+                }                
+            }    
+        }
+    }
 }
+
+
+
+
+
 
 
