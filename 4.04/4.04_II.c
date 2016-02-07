@@ -208,13 +208,15 @@ int getop ( char s [] )
                     else {
                         def_last_val ( match );
                     };
+                    clear_string ( string_symb );
                 }
                 else {
                     match = 0;
                     while ( isletter ( string_symb [ str_symb_p ++ ] = c = getch () ) || match < 1 ){
                         match = recogn_string ( string_symb );
-                        printf ( "Got it!)\n" );
                     };    
+                    printf ( "Got it!)\n" );
+
 //                    if ()
 
                 };  
