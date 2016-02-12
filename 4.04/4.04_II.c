@@ -14,7 +14,7 @@
 #define NUMBER_6 '6'
 #define NUMBER_7 '7'
 #define NUMBER_8 '8'
-#define NUMBER_0 '9'
+#define NUMBER_9 '9'
 
 
 
@@ -215,9 +215,7 @@ int getop ( char s [] )
                 clear_string ( string_symb );
                 string_symb [ 0 ] = c;
                 str_symb_p = 1;
-                printf ( "in isletter ( c ) string_symb = %s;\n", string_symb );
                 if ( ( c2 = getch () ) == ' ' ) {
-                    printf ( "getted c2 = \"%c\".\n", c2 );
                     ungetch ( c2 );
                     string_symb [ 1 ] = '\0';
                     str_symb_p = 1;
@@ -233,21 +231,28 @@ int getop ( char s [] )
                             last_val = match;
                         };
                         clear_string ( string_symb );
+                        return match;
                     }
-                    return match;
+                    else {
+                        return 0;                   
+                    }
                 }
                 else {
-                    printf ( "getted c2 = %c and str_symb_p = %d;\n\n", c2, str_symb_p );
-                    string_symb [ 1 ] = c2;
-                    str_symb_p = 2;
-                    match = 0;
+                    if ( isletter ( c2 ) == 1 ){
+                        string_symb [ 1 ] = c2;
+                        str_symb_p = 2;
+                        match = 0;
+                    }
+                    else {
+                        ungetch
+                    };
                     printf ( "2.string_symb = %s. str_symb_p = %d.\n", string_symb, str_symb_p );
-                    while ( isletter ( string_symb [ str_symb_p ++ ] = c = getch () ) && match < 1 ) {
-                        printf ( "string_symb [ str_symb_p = %d ] = \"%c\".\n", str_symb_p, string_symb [ str_symb_p - 1 ] );
+                    while ( ( isletter ( string_symb [ str_symb_p ++ ] = c = getch () ) == 1 ) && match < 1 ) {
+                        printf ( "\nin while string_symb [ str_symb_p = %d ] = \"%c\".\n", str_symb_p, string_symb [ str_symb_p - 1 ] );
                         match = recogn_string ( string_symb );
                         printf ( "after recognizing match = %d, str_symb_p = %d, and string : \'%s\'.\n", match, str_symb_p, string_symb );
-                    };    
-                    printf ( "string_symb = %s;\n", string_symb );
+                    };
+                    printf ( "after recogn match = %d, string = %s;\n", match, string_symb );    
                 };  
             }
             else {
