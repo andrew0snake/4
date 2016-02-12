@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 #define MAXOP 100
 #define MAXVAL 100
@@ -66,7 +67,10 @@ void main ()
 
     printf ( "---------------------------------------------------------------------------------------------\n");
     printf ( "This is polish notation calculator.\nIn it you can use binary functions '+', '-', '*', '/', '%%'.\n" );
-//    printf ( "Also in it may be used values 'a', 'b', 'c', 'd'; values are using by expression \"a 5 = \" and \"enter\".\n" );
+    printf ( "Also in it may be used values 'a', 'b', 'c', 'd'; values are using by expression \"a 5 = \" and \"enter\".\n" );
+    printf ( "---------------------------------------------------------------------------------\n" );
+    printf ( "IMPORTANT!!! Between digits, values, operands and commands you MUST use spaces!\n" );
+    printf ( "---------------------------------------------------------------------------------\n" );
     printf ( "In it you may use next comands:\n" );
     printf ( "ph - print higher element in stack ( with safekeeping this element in stack ).\n" );
     printf ( "db - double element in stack.\n" );
@@ -116,6 +120,19 @@ void main ()
         case 0:
             printf ( "Wrong input,may you try again?\n" );
             break;
+        case 1:
+            printf ( "Inputed value a.\n" );
+            break;
+        case 2:
+            printf ( "Inputed value b.\n" );
+            break;
+        case 3:
+            printf ( "Inputed value c.\n" );
+            break;
+        case 4:
+            printf ( "Inputed value d.\n" );
+            break;
+
         default:
             printf ( "Error, unknown operation %s.\n", s );
             break;
@@ -163,17 +180,15 @@ int getop ( char s [] )
 {
     int i = 0;
     int c = 0;
+    int c2 = 0;
+    int t = 0;
     unsigned short int match = 0;
     
     while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
         ;
     s [ 1 ] = '\0';
     
-/*    if ( ! isdigit ( c ) && c != '.' ){
-        return c; // is not a number 
-    };
-*/
-    if ( isdigit ( c ) || c == '.' ) {
+   if ( isdigit ( c ) || c == '.' ) {
         i = 0;
     
         if ( isdigit ( c ) )	/* getting whole part */
@@ -197,28 +212,42 @@ int getop ( char s [] )
         }
         else {
             if ( isletter ( c ) ) {
+                clear_string ( string_symb );
                 string_symb [ 0 ] = c;
-                string_symb [ 1 ] = '\0';
                 str_symb_p = 1;
-                match = 0;
-                if ( ( match = recogn_string ( string_symb ) ) > 0 ) {
-                    if ( last_val > 0 ) {
-                        def_pre_last_val ( match );   
+                printf ( "in isletter ( c ) string_symb = %s;\n", string_symb );
+                if ( ( c2 = getch () ) == ' ' ) {
+                    printf ( "getted c2 = \"%c\".\n", c2 );
+                    ungetch ( c2 );
+                    string_symb [ 1 ] = '\0';
+                    str_symb_p = 1;
+                    match = 0;
+                    if ( ( match = recogn_string ( string_symb ) ) > 0 ) {
+                        if ( last_val > 0 ) {
+//                            def_pre_last_val ( match );   
+                            pre_last_val = last_val;
+                            last_val = match;
+                        }
+                        else {
+//                            def_last_val ( match );
+                            last_val = match;
+                        };
+                        clear_string ( string_symb );
                     }
-                    else {
-                        def_last_val ( match );
-                    };
-                    clear_string ( string_symb );
+                    return match;
                 }
                 else {
+                    printf ( "getted c2 = %c and str_symb_p = %d;\n\n", c2, str_symb_p );
+                    string_symb [ 1 ] = c2;
+                    str_symb_p = 2;
                     match = 0;
-                    while ( isletter ( string_symb [ str_symb_p ++ ] = c = getch () ) || match < 1 ){
+                    printf ( "2.string_symb = %s. str_symb_p = %d.\n", string_symb, str_symb_p );
+                    while ( isletter ( string_symb [ str_symb_p ++ ] = c = getch () ) && match < 1 ) {
+                        printf ( "string_symb [ str_symb_p = %d ] = \"%c\".\n", str_symb_p, string_symb [ str_symb_p - 1 ] );
                         match = recogn_string ( string_symb );
+                        printf ( "after recognizing match = %d, str_symb_p = %d, and string : \'%s\'.\n", match, str_symb_p, string_symb );
                     };    
-                    printf ( "Got it!)\n" );
-
-//                    if ()
-
+                    printf ( "string_symb = %s;\n", string_symb );
                 };  
             }
             else {
@@ -237,6 +266,7 @@ int getop ( char s [] )
 int getch ( void )
 
 {
+//    printf ( "In getch: bufp = %d, buf [ bufp - 1 ] = \'%c\'.\n", bufp, buf [ bufp - 1] );
     return ( ( bufp > 0 ) ? ( buf [ --bufp ] ) : getchar () );
 
 }
@@ -291,6 +321,7 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
     char d [ MAXVAL ] = "d"; 
 
     int i = 0;
+    printf ( "in recogn_string string_symb = %s;\n", string_symb );
 
     if ( strcmp ( string, a ) == 0 ) {
         str_symb_p = 0;
@@ -329,6 +360,7 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
                             else {
                                 if ( strcmp ( string, sin ) == 0 ) {
                                     str_symb_p = 0;
+                                    printf ( "in recogn_string in compare with sin string_symb = %s; str_symb_p = %d;\n", string_symb, str_symb_p );
                                     return 8;
                                 }
                                 else {
@@ -357,7 +389,7 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
 
 void def_last_val ( unsigned short int match ) {
 
-    if ( match == 1 ) {
+/*    if ( match == 1 ) {
         last_val = 1;
     }    
     else {
@@ -375,11 +407,15 @@ void def_last_val ( unsigned short int match ) {
             }    
         }
     }
+*/
+
+    last_val = match;
+
 }
 
 void def_pre_last_val ( unsigned short int match ) {
 
-    if ( match == 1 ) {
+/*    if ( match == 1 ) {
         pre_last_val = last_val;
         last_val = 1;
     }    
@@ -401,6 +437,9 @@ void def_pre_last_val ( unsigned short int match ) {
             }    
         }
     }
+*/
+    pre_last_val = last_val;
+    last_val = match;
 }
 
 
