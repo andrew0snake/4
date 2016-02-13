@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <math.h>
 
 #define MAXOP 100
 #define MAXVAL 100
+#define MAXLEN 10
 #define NUMBER_0 '0'
 #define NUMBER_1 '1'
 #define NUMBER_2 '2'
@@ -45,7 +47,7 @@ void push_my ( double );
 double pop ( void );
 
 int getch ( void );
-void ungetch ( int );
+void ungetch ( int c );
 int getop ( char s [] );
 int double2int ( double );
 unsigned short int isoperand ( char symb );
@@ -54,6 +56,7 @@ void clear_string ( char string [ MAXVAL ] );
 unsigned short int recogn_string ( char string [ MAXVAL ] );
 void def_last_val ( unsigned short int match );
 void def_pre_last_val ( unsigned short int match );
+void put_digit_in_value ( void );
 //-----------functions
 
 void main ()
@@ -132,7 +135,22 @@ void main ()
         case 4:
             printf ( "Inputed value d.\n" );
             break;
-
+        case 8:
+            if ( sp > 0 ) {
+                push_my ( sin ( pop () ) );
+            }
+            else {
+                printf ( "Stack of digits is empty. nothing to use.\n" );
+            };
+            break;
+        case '=':
+            if ( sp > 0 ) {
+                put_digit_in_value ();
+            }
+            else {
+                printf ( "Too early to equate. Try to input digit at first.\n" );
+            };
+            break;
         default:
             printf ( "Error, unknown operation %s.\n", s );
             break;
@@ -152,7 +170,7 @@ void push_my ( double f )
         else {
             val [ sp++ ] = f;
         }
-        printf ( "After addition stack pointer sp = %d; and pushing   value = %4.0lf;\n", sp, val [ sp - 1 ] );
+        printf ( "After addition stack pointer sp = %d; and pushing   value = %4lf;\n", sp, val [ sp - 1 ] );
     }
     else 
         printf ( "Error:stack is full. %g not contain.\n", f );
@@ -164,7 +182,7 @@ double pop ( void )
 {
 
     if ( sp > 0 ){
-        printf ( "After decrease stack pointer sp = %d; and returning value = %4.0lf;\n", sp - 1, val [ sp - 1 ] );
+        printf ( "After decrease stack pointer sp = %d; and returning value = %4lf;\n", sp - 1, val [ sp - 1 ] );
         return ( val [ --sp ] );
     }
     else 
@@ -183,7 +201,8 @@ int getop ( char s [] )
     int c2 = 0;
     int t = 0;
     unsigned short int match = 0;
-    
+    unsigned short int exit = 0;
+   
     while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
         ;
     s [ 1 ] = '\0';
@@ -201,8 +220,10 @@ int getop ( char s [] )
             };   
 
         s [ i ] = '\0';
-        if ( c != EOF )
-            ungetch ( c );
+        if ( c != ' ' ) 
+            return 0;
+//        if ( c != EOF )
+  //          ungetch ( c );
          printf ( "Whole string is:%s;\n", s );    
         return NUMBER_0;
     }
@@ -244,18 +265,36 @@ int getop ( char s [] )
                         match = 0;
                     }
                     else {
-                        ungetch
+                        clear_string ( string_symb );
+                        return 0;
                     };
                     printf ( "2.string_symb = %s. str_symb_p = %d.\n", string_symb, str_symb_p );
-                    while ( ( isletter ( string_symb [ str_symb_p ++ ] = c = getch () ) == 1 ) && match < 1 ) {
-                        printf ( "\nin while string_symb [ str_symb_p = %d ] = \"%c\".\n", str_symb_p, string_symb [ str_symb_p - 1 ] );
+                    match = 0;
+                    while ( match < 1 ) {
+                        if ( str_symb_p > MAXLEN ) {
+                            clear_string ( string_symb );
+                            return 0;
+                        };
                         match = recogn_string ( string_symb );
                         printf ( "after recognizing match = %d, str_symb_p = %d, and string : \'%s\'.\n", match, str_symb_p, string_symb );
+                        if ( match == 0 ) {
+                           string_symb [ str_symb_p ++ ] = c = getch (); 
+                        }
+                        else {
+                            clear_string ( string_symb );
+                            return match;
+                        }
+                        if ( isletter ( c ) == 0 ) {
+                            clear_string ( string_symb );
+                            return 0;
+                        }
                     };
                     printf ( "after recogn match = %d, string = %s;\n", match, string_symb );    
                 };  
             }
             else {
+                if ( c == '=' )
+                    return c;
                 if ( c == EOF ) {
                     return ( -1 ); 
                 }
@@ -392,63 +431,32 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
     }
 }
 
-void def_last_val ( unsigned short int match ) {
 
-/*    if ( match == 1 ) {
-        last_val = 1;
-    }    
+void put_digit_in_value ( void ) {
+
+    if ( last_val == 1 ) {
+        val_a = pop ();
+        last_val = 0;
+    }
     else {
-        if ( match == 2 ) {
-            last_val = 2;
+        if ( last_val == 2 ) {
+            val_b = pop ();
+            last_val = 0;
         }    
         else {
-            if ( match == 3 ) {
-                last_val = 3;
-            }    
+            if ( last_val == 3 ) {
+                val_c = pop ();
+                last_val = 0;
+            }
             else {
-                if ( match == 4 ) {
-                    last_val = 4;
-                }                
-            }    
+                if ( last_val == 4 ) {
+                    val_d = pop ();
+                    last_val = 0;
+                }
+            }
         }
     }
-*/
-
-    last_val = match;
-
 }
-
-void def_pre_last_val ( unsigned short int match ) {
-
-/*    if ( match == 1 ) {
-        pre_last_val = last_val;
-        last_val = 1;
-    }    
-    else {
-        if ( match == 2 ) {
-            pre_last_val = last_val;
-            last_val = 2;
-        }    
-        else {
-            if ( match == 3 ) {
-               pre_last_val = last_val;
-               last_val = 3;
-            }    
-            else {
-                if ( match == 4 ) {
-                  pre_last_val = last_val;
-                  last_val = 4;
-                }                
-            }    
-        }
-    }
-*/
-    pre_last_val = last_val;
-    last_val = match;
-}
-
-
-
 
 
 
