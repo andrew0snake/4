@@ -17,6 +17,7 @@
 #define NUMBER_7 '7'
 #define NUMBER_8 '8'
 #define NUMBER_9 '9'
+#define NUMBER_10 '10'
 
 
 
@@ -57,6 +58,8 @@ unsigned short int recogn_string ( char string [ MAXVAL ] );
 void def_last_val ( unsigned short int match );
 void def_pre_last_val ( unsigned short int match );
 void put_digit_in_value ( void );
+void push_last_and_prelast ( void );
+unsigned short int convert_match_to_predefided ( unsigned short int match );
 //-----------functions
 
 void main ()
@@ -91,12 +94,15 @@ void main ()
            push_my ( atof ( s ) );
            break;
         case '+':
+            push_last_and_prelast ();
             push_my ( pop () + pop () );
             break;
         case '*':
+            push_last_and_prelast ();
             push_my ( pop () * pop () );
             break;
         case '-':
+            push_last_and_prelast ();
             if ( sp == 2 ) {
                 printf ( "Operation minus.\n" );
                 op2 = pop ();
@@ -107,6 +113,7 @@ void main ()
             }
             break;
         case '/':
+            push_last_and_prelast ();
             op2 = pop ();
             if ( op2 != 0.0 )
                 push_my ( pop () / op2 );
@@ -114,11 +121,13 @@ void main ()
                 printf ( "Error, division by zero.\n" );
             break;
         case '%':
+            push_last_and_prelast ();
             op2_int = ( int )  pop ();
             push_my ( ( ( int )  pop () ) % op2_int );
             break;
         case '\n':
             printf ( "Result = %.8g; neg = %d; sp = %d.\n", pop (), neg, sp );
+            printf ( "Values: val_a = %lf, val_b = %lf, val_c = %lf, val_d = %lf.\n", val_a, val_b, val_c, val_d );
             break;
         case 0:
             printf ( "Wrong input,may you try again?\n" );
@@ -136,12 +145,29 @@ void main ()
             printf ( "Inputed value d.\n" );
             break;
         case 8:
+            push_last_and_prelast ();
             if ( sp > 0 ) {
                 push_my ( sin ( pop () ) );
             }
             else {
                 printf ( "Stack of digits is empty. nothing to use.\n" );
             };
+            break;
+        case NUMBER_5:
+            op2 = pop ();
+            push_my ( op2 );
+            printf ( "Highest element in stack is %lf.\n", op2 );
+            break;
+        case NUMBER_9:
+            push_last_and_prelast ();
+            push_my ( exp ( pop () ) );
+            op2 = 0;
+            break;
+        case NUMBER_10:
+            push_last_and_prelast ();
+            op2 = pop (); 
+            push_my ( pow ( pop (), op2 ) );
+            op2 = 0;
             break;
         case '=':
             if ( sp > 0 ) {
@@ -252,7 +278,8 @@ int getop ( char s [] )
                             last_val = match;
                         };
                         clear_string ( string_symb );
-                        return match;
+                        return convert_match_to_predefided ( match );
+//                        return match;
                     }
                     else {
                         return 0;                   
@@ -282,7 +309,8 @@ int getop ( char s [] )
                         }
                         else {
                             clear_string ( string_symb );
-                            return match;
+                            return convert_match_to_predefided ( match );
+//                            return match;
                         }
                         if ( isletter ( c ) == 0 ) {
                             clear_string ( string_symb );
@@ -459,5 +487,95 @@ void put_digit_in_value ( void ) {
 }
 
 
+
+void push_last_and_prelast ( void ) {
+
+    printf ( "Pushing last and pre_last values.\n" );
+    if ( last_val > 0 ) {
+        if ( pre_last_val > 0 ) {
+            if ( pre_last_val == 1 ) {
+                push_my ( val_a );
+            };
+            if ( pre_last_val == 2) {
+                push_my ( val_b );
+            };
+            if ( pre_last_val == 3 ) {
+                push_my ( val_c );
+            };
+            if ( pre_last_val == 4 ) {
+                push_my ( val_d );
+            };
+
+            if ( last_val == 1 ) {
+                push_my ( val_a );
+            };
+            if ( last_val == 2) {
+                push_my ( val_b );
+            };
+            if ( last_val == 3 ) {
+                push_my ( val_c );
+            };
+            if ( last_val == 4 ) {
+                push_my ( val_d );
+            };
+
+            pre_last_val = 0;
+            last_val = 0;
+        }
+        else {
+            if ( last_val == 1 ) {
+                push_my ( val_a );
+            };
+            if ( last_val == 2) {
+                push_my ( val_b );
+            };
+            if ( last_val == 3 ) {
+                push_my ( val_c );
+            };
+            if ( last_val == 4 ) {
+                push_my ( val_d );
+            };
+
+            last_val = 0;
+        }; 
+    };
+
+    printf ( "End of pushing.\n" );
+
+}
+
+unsigned short int convert_match_to_predefided ( unsigned short int match ) {
+
+    if ( match == 1 ) {
+        return NUMBER_1;
+    }
+    if ( match == 2 ) {
+        return NUMBER_2;
+    }
+    if ( match == 3 ) {
+        return NUMBER_3;
+    }
+    if ( match == 4 ) {
+        return NUMBER_4;
+    }
+    if ( match == 5 ) {
+        return NUMBER_5;
+    }
+    if ( match == 6 ) {
+        return NUMBER_6;
+    }
+    if ( match == 7 ) {
+        return NUMBER_7;
+    }
+    if ( match == 8 ) {
+        return NUMBER_8;
+    }
+    if ( match == 9 ) {
+        return NUMBER_9;
+    }
+    if ( match == 10 ) {
+        return NUMBER_10;
+    }
+}
 
 
