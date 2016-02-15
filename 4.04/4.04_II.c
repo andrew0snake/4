@@ -18,6 +18,7 @@
 #define NUMBER_8 '8'
 #define NUMBER_9 '9'
 #define NUMBER_10 '10'
+#define NUMBER_11 '11'
 
 
 
@@ -79,9 +80,9 @@ void main ()
     printf ( "---------------------------------------------------------------------------------\n" );
     printf ( "In it you may use next comands:\n" );
     printf ( "ph - print higher element in stack ( with safekeeping this element in stack ).\n" );
-    printf ( "db - double element in stack.\n" );
     printf ( "sw - switch two higher elements in stack.\n" );
     printf ( "cs - clear stack.\n" );
+    printf ( "dbl - double element in stack.\n" );
     printf ( "And also it's possible to use a functions sin, exp and pow in syntax \"4 pow\" \"enter\".\n" );
     printf ( "---------------------------------------------------------------------------------------------\n\n");
 
@@ -167,6 +168,13 @@ void main ()
             push_last_and_prelast ();
             op2 = pop (); 
             push_my ( pow ( pop (), op2 ) );
+            op2 = 0;
+            break;
+        case NUMBER_11:
+            push_last_and_prelast ();
+            op2 = pop ();
+            push_my ( op2 );
+            push_my ( op2 );
             op2 = 0;
             break;
         case '=':
@@ -384,6 +392,7 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
     char ph [ MAXVAL ] = "ph"; 
     char sw [ MAXVAL ] = "sw"; 
     char cs [ MAXVAL ] = "cs"; 
+    char dbl [ MAXVAL ] = "dbl";
     char sin [ MAXVAL ] = "sin"; 
     char exp [ MAXVAL ] = "exp"; 
     char pow [ MAXVAL ] = "pow"; 
@@ -432,7 +441,7 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
                             else {
                                 if ( strcmp ( string, sin ) == 0 ) {
                                     str_symb_p = 0;
-                                    printf ( "in recogn_string in compare with sin string_symb = %s; str_symb_p = %d;\n", string_symb, str_symb_p );
+//                                    printf ( "in recogn_string in compare with sin string_symb = %s; str_symb_p = %d;\n", string_symb, str_symb_p );
                                     return 8;
                                 }
                                 else {
@@ -446,7 +455,12 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
                                             return 10;
                                         }
                                         else {
-                                            return 0;
+                                            if ( strcmp ( string, dbl ) == 0 ) {
+                                                str_symb_p = 0;
+                                                return 11;
+                                            }
+                                            else
+                                                return 0;
                                         }
                                     }
                                 }
@@ -576,6 +590,10 @@ unsigned short int convert_match_to_predefided ( unsigned short int match ) {
     if ( match == 10 ) {
         return NUMBER_10;
     }
+    if ( match == 11 ) {
+        return NUMBER_11;
+    }
+
 }
 
 
