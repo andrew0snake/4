@@ -19,7 +19,8 @@
 #define NUMBER_9 '9'
 #define NUMBER_10 '10'
 #define NUMBER_11 '11'
-
+#define NUMBER_EOF '12'
+#define NUMBER_EXIT '13'
 
 
 #define BUFSIZE 100
@@ -93,7 +94,7 @@ void main ()
     clear_string ( string_symb );
     str_symb_p = 0;
  
-    while ( ( type = getop ( s ) ) != EOF ){
+    while ( ( type = getop ( s ) ) != NUMBER_EXIT ){
         switch ( type ){
         case NUMBER_0:
            push_my ( atof ( s ) );
@@ -177,6 +178,7 @@ void main ()
                 for ( i = 0; i < sp; i++ ) {
                     val [ i ] = 0;
                 };
+                sp = 0;
             }
             else {
                 printf ( "Stack is empty, nothing to clear.\n" );
@@ -217,6 +219,15 @@ void main ()
                 printf ( "Too early to equate. Try to input digit at first.\n" );
             };
             break;
+        case NUMBER_EOF:
+            printf ( "You entered EndOfFile symbol.\n" );
+            op2_int ++;
+            printf ( "op2_int = %d;\n", op2_int );
+//            clear_string ( s );
+            if ( op2_int == 10 )
+                getchar ();
+            break;
+            type = 0;
         default:
             printf ( "Error, unknown operation %s.\n", s );
             break;
@@ -364,7 +375,7 @@ int getop ( char s [] )
                 if ( c == '=' )
                     return c;
                 if ( c == EOF ) {
-                    return ( -1 ); 
+                    return NUMBER_EOF; 
                 }
                 else {
                     return 0; 
@@ -428,6 +439,7 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
     char sin [ MAXVAL ] = "sin"; 
     char exp [ MAXVAL ] = "exp"; 
     char pow [ MAXVAL ] = "pow"; 
+    char exit [ MAXVAL ] = "exit";
     char a [ MAXVAL ] = "a"; 
     char b [ MAXVAL ] = "b"; 
     char c [ MAXVAL ] = "c"; 
@@ -491,8 +503,14 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
                                                 str_symb_p = 0;
                                                 return 11;
                                             }
-                                            else
-                                                return 0;
+                                            else {
+                                                if ( strcmp ( string, exit ) == 0 ) {
+                                                    str_symb_p = 0;
+                                                    return 13;
+                                                }
+                                                else
+                                                    return 0;
+                                            }
                                         }
                                     }
                                 }
@@ -624,6 +642,12 @@ unsigned short int convert_match_to_predefided ( unsigned short int match ) {
     }
     if ( match == 11 ) {
         return NUMBER_11;
+    }
+    if ( match == 12 ) {
+        return NUMBER_EOF;
+    }
+    if ( match == 13 ) {
+        return NUMBER_EXIT;
     }
 
 }
