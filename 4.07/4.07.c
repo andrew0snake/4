@@ -21,6 +21,7 @@
 #define NUMBER_11 '11'
 #define NUMBER_EOF '12'
 #define NUMBER_EXIT '13'
+#define NUMBER_REV '14'
 
 
 #define BUFSIZE 100
@@ -30,6 +31,8 @@ char neg = 0; //negativity pointer
 int sp = 0; //stack pointer
 double val [ MAXVAL ]; //stack of values
 char buf [ BUFSIZE ]; //buffer for ungetch
+char s2 [ MAXVAL ];//string for ungets 
+unsigned short int s2_p = 0;
 int bufp = 0; //next free position for ungetch
 
 char string_symb [ MAXVAL ];
@@ -62,7 +65,9 @@ void def_pre_last_val ( unsigned short int match );
 void put_digit_in_value ( void );
 void push_last_and_prelast ( void );
 unsigned short int convert_match_to_predefided ( unsigned short int match );
-void print_stack ();
+void print_stack ( void );
+void print_buffer ( void );
+void ungets ( char string [ MAXVAL ] );
 //-----------functions
 
 void main ()
@@ -135,6 +140,8 @@ void main ()
             last = pop ();
             printf ( "Result = %.8g; neg = %d; sp = %d.\n", last, neg, sp );
             printf ( "Values: val_a = %lf, val_b = %lf, val_c = %lf, val_d = %lf.\n", val_a, val_b, val_c, val_d );
+            clear_string ( s2 );
+            s2_p = 0;
             print_stack ();
             break;
         case 0:
@@ -220,14 +227,18 @@ void main ()
             };
             break;
         case NUMBER_EOF:
-            printf ( "You entered EndOfFile symbol.\n" );
+            printf ( "You entered EndOfFile symbol.String is %s.\n", s );
             op2_int ++;
             printf ( "op2_int = %d;\n", op2_int );
 //            clear_string ( s );
-            if ( op2_int == 10 )
-                getchar ();
-            break;
+//            if ( op2_int == 10 )
+//                getchar ();
             type = 0;
+            break;
+        case NUMBER_REV:
+            ungets ( s );
+            print_buffer ();
+            break;
         default:
             printf ( "Error, unknown operation %s.\n", s );
             break;
@@ -283,16 +294,22 @@ int getop ( char s [] )
     while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
         ;
     s [ 1 ] = '\0';
-    
-   if ( isdigit ( c ) || c == '.' ) {
+    s2 [ 0 ] = s [ 0 ];
+    s2 [ 1 ] = '\0';
+    s2_p = 1;
+   
+    if ( isdigit ( c ) || c == '.' ) {
         i = 0;
     
         if ( isdigit ( c ) )	/* getting whole part */
-            while ( isdigit ( s [ ++i ] = c = getch () ) )
-            ;
+            while ( isdigit ( s [ ++i ] = c = getch () ) ) {
+                 s2 [ s2_p ++ ] = c;
+            };
     
         if ( c == '.' )		/* getting fractional part */
+            s2 [ s2_p ++ ] = c; 
             while ( isdigit ( s [ ++i ] = c = getch () ) ){
+                s2 [ s2_p ++ ] = c;
                 printf ( "s [ i = %d ] = %d in digit and %c in char;\n", i, s [ i ], s [ i ] );
             };   
 
@@ -306,15 +323,18 @@ int getop ( char s [] )
     }
     else {
         if ( isoperand ( c ) || c == '\n' ) {
+            s2 [ s2_p ++ ] = c; 
             return c;
         }
         else {
             if ( isletter ( c ) ) {
+                s2 [ s2_p ++ ] = c; 
                 clear_string ( string_symb );
                 string_symb [ 0 ] = c;
                 str_symb_p = 1;
                 if ( ( c2 = getch () ) == ' ' ) {
                     ungetch ( c2 );
+                    s2 [ s2_p ++ ] = c2;
                     string_symb [ 1 ] = '\0';
                     str_symb_p = 1;
                     match = 0;
@@ -346,7 +366,7 @@ int getop ( char s [] )
                         clear_string ( string_symb );
                         return 0;
                     };
-                    printf ( "2.string_symb = %s. str_symb_p = %d.\n", string_symb, str_symb_p );
+//                    printf ( "2.string_symb = %s. str_symb_p = %d.\n", string_symb, str_symb_p );
                     match = 0;
                     while ( match < 1 ) {
                         if ( str_symb_p > MAXLEN ) {
@@ -357,6 +377,7 @@ int getop ( char s [] )
                         printf ( "after recognizing match = %d, str_symb_p = %d, and string : \'%s\'.\n", match, str_symb_p, string_symb );
                         if ( match == 0 ) {
                            string_symb [ str_symb_p ++ ] = c = getch (); 
+                           s2 [ s2_p ++ ] = c;
                         }
                         else {
                             clear_string ( string_symb );
@@ -372,9 +393,12 @@ int getop ( char s [] )
                 };  
             }
             else {
-                if ( c == '=' )
+                if ( c == '=' ) {
+                    s2 [ s2_p ++ ] = c; 
                     return c;
+                }
                 if ( c == EOF ) {
+                    s2 [ s2_p ++ ] = c;
                     return NUMBER_EOF; 
                 }
                 else {
@@ -439,6 +463,7 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
     char sin [ MAXVAL ] = "sin"; 
     char exp [ MAXVAL ] = "exp"; 
     char pow [ MAXVAL ] = "pow"; 
+    char rev  [ MAXVAL ] = "rev"; 
     char exit [ MAXVAL ] = "exit";
     char a [ MAXVAL ] = "a"; 
     char b [ MAXVAL ] = "b"; 
@@ -508,8 +533,15 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
                                                     str_symb_p = 0;
                                                     return 13;
                                                 }
-                                                else
-                                                    return 0;
+                                                else {
+                                                    if ( strcmp ( string, rev ) == 0 ) {
+                                                        str_symb_p = 0;
+                                                        return 14;
+                                                    }
+                                                    else {
+                                                        return 0;
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -649,6 +681,9 @@ unsigned short int convert_match_to_predefided ( unsigned short int match ) {
     if ( match == 13 ) {
         return NUMBER_EXIT;
     }
+    if ( match == 14 ) {
+        return NUMBER_REV;
+    }
 
 }
 
@@ -668,3 +703,38 @@ void print_stack () {
     }
 
 }
+
+void print_buffer ( void ) {
+
+    unsigned short int i = 0;
+    
+    while ( i < bufp ) {
+        printf ( "buf [ %d ] = %c.\n", i, buf [ i ] );
+    }
+
+}
+
+void ungets ( char string [ MAXVAL ] ) {
+
+    char c1 = 0;
+    char c2 = 0;
+    char c3 = 0;
+    unsigned short int exit = 0;
+    unsigned short int i = 0;
+
+    for ( i = 0; exit == 0 || string [ i ] != EOF; i++ ) {
+        if ( string [ i ] == 'r' && string [ i + 1 ] == 'e' && string [ i + 2 ] == 'v' ) {
+            exit = 1;
+	    printf ( "exit = 0; s [ %d ] = %c; s [ %d ] = %c; s [ %d ] = %c.\n", i, string [ i ], i + 1,  string [ i + 1 ], i + 2, string [ i + 2 ] );
+        }
+        else {
+            ungetch ( string [ i ] );
+            printf ( "ungetching symbol %c, i = %d.\n", string [ i ], i );
+        };
+        if ( i > 15 ) {
+            exit = 1;
+        };
+    }
+
+}
+
