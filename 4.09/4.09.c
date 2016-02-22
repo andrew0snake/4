@@ -20,7 +20,7 @@
 #define NUMBER_10 '10'
 #define NUMBER_11 '11'
 #define NUMBER_12 '12' //return string ( ungets ( s ) )
-#define NUMBER_13 '13'
+#define NUMBER_13 '13'//exit
 #define NUMBER_14 '14'
 #define NUMBER_15 '15'
 
@@ -102,7 +102,7 @@ void main ()
     clear_string ( string_symb );
     str_symb_p = 0;
  
-    while ( ( type = getop ( s ) ) != EOF ){
+    while ( ( type = getop ( s ) ) != NUMBER_13 ){
         switch ( type ){
         case NUMBER_0:
            push_my ( atof ( s ) );
@@ -234,6 +234,10 @@ void main ()
             else {
                 printf ( "Too early to equate. Try to input digit at first.\n" );
             };
+            break;
+        case -1:
+            printf ( "You entered EOF symbol.\n" );
+ 
             break;
         default:
             printf ( "Error, unknown operation %s.\n", s );
@@ -465,6 +469,7 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
     char exp [ MAXVAL ] = "exp"; 
     char pow [ MAXVAL ] = "pow"; 
     char ret [ MAXVAL ] = "ret"; 
+    char exit [ MAXVAL ] = "exit"; 
     char a [ MAXVAL ] = "a"; 
     char b [ MAXVAL ] = "b"; 
     char c [ MAXVAL ] = "c"; 
@@ -533,8 +538,14 @@ unsigned short int recogn_string ( char string [ MAXVAL ] ) {
                                                     str_symb_p = 0;
                                                     return 12;
                                                 }
-                                                else 
-                                                    return 0;
+                                                else {
+                                                    if ( strcmp ( string, exit ) == 0 ) {
+                                                        str_symb_p = 0;
+                                                        return 13;
+                                                    }
+                                                    else 
+                                                        return 0;
+                                                }
                                             }                                            
                                         }
                                     }
