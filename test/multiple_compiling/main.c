@@ -3,15 +3,18 @@
 #include "calc.h"
 #define MAXOP 100
 char neg = 0;
+extern int sp;
+//int sp = 0;
 
 main () {
-    int sp = 0;
+//    int sp = 0;
     int type = 0;
     int op2_int = 0;
     double op2 = 0;
     char s [ MAXOP ];
  
     while ( ( type = getop ( s ) ) != EOF ){
+        printf ( "type = '%c' in char and %d in digit. And sp = %d.\n", type, type, sp );
         switch ( type ){
         case NUMBER:
             if ( neg == 0 ) {

@@ -137,7 +137,6 @@ int getop ( char s [] )
     unsigned short int i = 0;
     int c = 0;
      
-    printf ( "Lenght of string_source = %d;\n", strlen ( string_source ) ); 
     if ( ss_p > strlen ( string_source ) ) {
         return ERROR;
     }
@@ -156,11 +155,9 @@ int getop ( char s [] )
     s [ 1 ] = '\0';
     
     if ( ! isdigit ( string_source [ ss_p ] ) && string_source [ ss_p ] != '.' ){
-        printf ( "string_source [ ss_p = %d ] = '%c' in char; %d in digit and is returned.\n", ss_p, string_source [ ss_p ], string_source [ ss_p ]  );
         return string_source [ ss_p ++ ]; /* is not a number */
     };
     i = 0;
-    printf ( "string s = '%s'; c = '%c'.\n", s, c );
     
     if ( isdigit ( c = string_source [ ss_p ] ) )	/* getting whole part */
         while ( isdigit ( s [ ++i ] = c = string_source [ ++ ss_p ] ) )
@@ -169,12 +166,11 @@ int getop ( char s [] )
     
     if ( c == '.' )		/* getting fractional part */
         while ( isdigit ( s [ ++i ] = c = string_source [ ++ ss_p ]) ){
-            printf ( "s [ i = %d ] = %d in digit and %c in char;\n", i, s [ i ], s [ i ] );
         };
         
 
     s [ i ] = '\0';
-    printf ( "Whole string is:%s;\n", s );    
+
     return NUMBER;
 
 }
@@ -184,24 +180,16 @@ void getline_my ( char string_source [ MAXVAL ] ) {
     char c = 0;
     unsigned short int i = 0;
 
-    printf ( "Getline function.\n" );
 
     while ( ( c = getchar () ) != '\n' && c != EOF ) {
         string_source [ i ] = c;
         i++;
-        printf ( "string_source [ %d ] = '%c' in char and %d in digit.\n", i - 1, string_source [ i - 1 ], string_source [ i - 1 ] ); 
     };
    
-    printf ( "After while string_source [ %d ] = '%c' in char and %d in digit.\n", i, string_source [ i ], string_source [ i ] ); 
-    printf ( "c = '%c' in char and %d in digit. i = %d.\n", c, c, i );
     if ( c  == '\n' ) {
         string_source [ i++ ] = '\n';
-        printf ( "string_source [ %d ] = '%c' in char and %d in digit.\n", i - 1, string_source [ i - 1 ], string_source [ i - 1 ] ); 
-        printf ( "string_source [ %d ] = '%c' in char and %d in digit.\n", i, string_source [ i ], string_source [ i ] ); 
         string_source [ i ] = EOF;
-        printf ( "string_source [ %d ] = '%c' in char and %d in digit.\n", i, string_source [ i ], string_source [ i ] ); 
     }
-    printf ( "full string = %s.\n", string_source ); 
 
 }
 
