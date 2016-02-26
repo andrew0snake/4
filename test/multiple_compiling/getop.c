@@ -6,7 +6,13 @@ int getop ( char s [ MAXVAL ] ) {
 
     int i = 0;
     int c = 0;
+    int bufp = 0;
+    char buf [ MAXVAL ];
     
+//  bufp = 0;
+     
+    printf ( "In function getop bufp = %d; buf [ bifp - 1 ] = %c.\n", bufp, buf [ bufp - 1 ] );
+
     while ( ( s [ 0 ] = c = getch () ) == ' ' || c == '\t' ) 
         ;
     s [ 1 ] = '\0';
