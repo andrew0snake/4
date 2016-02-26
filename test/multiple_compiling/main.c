@@ -12,6 +12,7 @@ main () {
     char s [ MAXOP ];
  
     while ( ( type = getop ( s ) ) != EOF ){
+        printf ( "type = '%c' in char and %d in digit.\n", type, type );
         switch ( type ){
         case NUMBER:
             if ( neg == 0 ) {
