@@ -18,12 +18,12 @@ echo "channel = "$channel;
 echo $channel > channel;
 echo "";
 
-filename=`cat $source| grep eow-title | awk -F '"' '{print $8}'`
+filename=`cat $source| grep eow-title | awk -F '"' '{print $8}'| sed 's/&quot\;//g'`
 echo "filename = "$filename;
 echo $filename > filename;
 echo "";
 
-description=`cat $source|grep "action-panel-details"|awk -F "<p id\=\"eow-description\" \>" '{print $2}'|sed  's/<br \/>/ /'|sed 's/<\/p>/ /'|sed 's/<\/div>//'|sed 's/<br \/>//'|sed 's/<div id="watch-description-extras" >//'|sed 's/<\/a>//'`
+description=`cat $source|grep "action-panel-details"|awk -F "<p id\=\"eow-description\" \>" '{print $2}'|sed  's/<br \/>/ /g'|sed 's/<\/p>/ /g'|sed 's/<\/div>//g'|sed 's/<br \/>//g'|sed 's/<div id="watch-description-extras" >//g'|sed 's/<\/a>//g'|sed 's/<br \/>//g'`
 echo "description = "$description;
 echo $description > description;
 echo "";
