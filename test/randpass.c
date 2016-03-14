@@ -10,10 +10,13 @@ void clear_string ( char string [ MAXSIZE_STRING ] );
 int gen_rand ( unsigned short int size );
 
 const char source [ 82 ] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9','0','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','!','@','#','$','%','&','*','(',')','!','@','#','$','%','&','*','(',')'};
+char endurance_size = 0;
+
 
 void main () {
  
     int i = 0;
+    int j = 0;
     int len_pass = 0;
     int size_int = 0;
     unsigned short int len_endur = 0;
@@ -46,17 +49,20 @@ void main () {
         getline_my ( endurance );
         if ( endurance [ 0 ] == 's' ) {
             len_endur = 79;
+            endurance_size = 3;
             exit = 1;
         }
         else {
             if ( endurance [ 0 ]  == 'm' ) {
                 len_endur = 61;
+                endurance_size = 2;
                 exit = 1;
  
             }
             else {
                 if ( endurance [ 0 ] = 'e') {
                     len_endur = 35;
+                    endurance_size = 1;
                     exit = 1;
                 }
                 else {
@@ -68,15 +74,17 @@ void main () {
         };
     };   
 
-    for ( i = 0; i < len_pass; i++ ) {
-        tmp = gen_rand (  len_endur ); 
-        password [ i ] = source [ tmp ];
-        tmp = 0;
-
-    };
-    password [ i ] = '\0';
-    printf ( "Getted string = %s\n", password );
-
+    for ( j = 0; j < 10; j++ ) {
+        clear_string ( password );
+        for ( i = 0; i < len_pass; i++ ) {
+            tmp = gen_rand (  len_endur ); 
+             password [ i ] = source [ tmp ];
+             tmp = 0;
+     
+         };
+         password [ i ] = '\0';
+         printf ( "Getted string = %s\n", password );
+    }
 }
 
 void clear_string ( char string [ MAXSIZE_STRING ] ) {
@@ -133,6 +141,7 @@ int atoi_my ( char s [ MAXSIZE_STRING ] )
 int gen_rand ( unsigned short int size ) {
 
     unsigned int randval;
+    unsigned int devider = 0;
     FILE *f;
 //for bsd uncomment this string 
 //    f = fopen ( "/dev/random", "r" );
@@ -142,8 +151,27 @@ int gen_rand ( unsigned short int size ) {
     fread ( &randval, sizeof ( randval ), 1, f );
     fclose ( f );
  
+    if ( endurance_size == 1 ) {
+        devider = 11;
+    }
+    else {
+        if ( endurance_size == 2 ) {
+            devider = 3;
+        }
+        else {
+            if ( endurance_size == 3 ) {
+                devider = 7;
+            }
+        }
+    };
+
+    if ( ( randval % 2 ) == 0 ) {
+        devider = 111;
+    };
+    
+
     while ( randval > size ) {
-        randval /= 11;
+        randval /= devider;
     };
 
     return randval;
