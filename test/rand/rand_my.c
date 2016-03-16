@@ -8,9 +8,10 @@
 int string_count = 0;
 int random_array [ A_S ];
 int count_of_names = 0;
-
 //end of defining values
 
+
+//definition of functions
 int countlines(char *filename);
 int gen_rand ( unsigned short int size ); 
 void full_rand_array ( int size_of_array, int rand_array [ A_S ] );
@@ -21,6 +22,7 @@ void clear_array ( int array [ A_S ] );
 void clear_string ( char array [ A_S ] );
 void full_list_of_names ( void );
 void get_numbered_line_of_file ( char line [ A_S ], int number );
+//end of definition of functions
 
 void main () {
 
@@ -85,15 +87,9 @@ int countlines ( char *filename ) {
     int ch = 0;
     int lines = 0;
 
-/*    if (fp == NULL) {
-        printf ( "fp = %d;\n", fp );
-        return 0;
-    };
-*/
     lines++;
 //    while ( ( ch = fgetc ( fp ) ) != EOF ) {
     while ( !feof ( fp ) ) {
-//        printf ( "getted char = %c;\n", ch );
         ch = fgetc ( fp );
         if ( ch == '\n' )
             lines++;
@@ -130,7 +126,7 @@ void full_rand_array ( int size_of_array, int rand_array [ 10000 ] ) {
                 exit = 0;
             };
         };
-//        printf ( "at step %d rand_array [ %d ] = %d;\n", i, i, rand_array [ i ] );
+        printf ( "at step %d rand_array [ %d ] = %d;\n", i, i, rand_array [ i ] );
     };
     printf ( "is finished.\n" );
 
@@ -234,7 +230,8 @@ void get_numbered_line_of_file ( char line [ A_S ], int number ) {
         fgets ( temp, 150, f );
 
     };
-    printf ( "temp [ strlen ( temp ) ] = %c;\n",  temp [ strlen ( temp ) ] );
+    temp [ strlen ( temp ) - 1 ] = ' ';
+    printf ( "temp [ strlen ( temp ) = %d - 1 ] = '%c';\n",  strlen ( temp ) - 1, temp [ strlen ( temp ) - 1 ] );
     printf ( "after cycle position = %d; and getted string = %s;\n", i, temp );
 
     fclose ( f );
