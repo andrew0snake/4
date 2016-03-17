@@ -190,6 +190,8 @@ void full_list_of_names ( void ) {
     char temp_string [ A_S ];
     char concat_string [ A_S ];
 
+    FILE *f; 
+
     printf ( "get first %d random strings of file keywords:\n", count_of_names );
 
     pointer = 0; 
@@ -204,11 +206,20 @@ void full_list_of_names ( void ) {
         clear_string ( temp_string );
         printf ( "at step %d in get_numbered_line_of_file send position %d;\n", pointer, random_array [ pointer ] );
         get_numbered_line_of_file ( temp_string, random_array [ pointer ] );
+        printf ( "after get_numbered_line_of_file string temp_string = '%s';\n", temp_string );
         pointer++;
         step++;
         
-        if ( strlen ( concat_string ) < 150 ) {
+        if ( strlen ( concat_string ) + strlen ( temp_string ) < 150 ) {
             strcat ( concat_string, temp_string );
+        }
+        else {
+            strcat ( concat_string, "\n" );
+            f = fopen ( "names_of_strings_list", "a+" );
+            fputs ( concat_string, f ); 
+            printf ( "in file names_of_strings_list added string = '%s';\n", concat_string );
+            fclose ( f );
+            clear_string ( concat_string );
         }
     }
 
