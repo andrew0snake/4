@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 //#define RAND_MAX 150
 #define A_S 10000
@@ -42,10 +43,10 @@ void main () {
 //    full_rand_array ( string_count, random_array );
 
     clear_string( temp );
-    printf ( "Input count of names:\n" );
+    printf ( "Input count of lines for to generate:\n" );
     getline_my ( temp, A_S );
     count_of_names = atoi_my ( temp );    
-    printf ( "Count of names = %d;\n", count_of_names );
+    printf ( "Count of random lines for to generate = %d;\n", count_of_names );
 
     full_list_of_names ();
 
@@ -65,7 +66,7 @@ int gen_rand ( unsigned short int size ) {
     fclose ( f );
  
     while ( randval > size ) {
-        randval /= 111;
+        randval /= 1111;
     };
 
     return randval;
@@ -106,12 +107,12 @@ void full_rand_array ( int size_of_array, int rand_array [ 10000 ] ) {
     char par = 0;
     int temp = 0;
 
-    printf ( "Fulling of random array..." );
-    for ( i = 0; i < size_of_array; i++ ) {
+    printf ( "Fulling of random array...\n" );
+    for ( i = 0; i < size_of_array - 10 ; i++ ) {
         exit = 0;
         while ( exit == 0 ) {
             par = 0;
-            temp = gen_rand ( string_count );
+            temp = gen_rand ( string_count - 1 );
            
             for ( j = 0; j < i; j++ ) { 
                 if ( temp == rand_array [ j ] ) {
@@ -192,23 +193,29 @@ void full_list_of_names ( void ) {
 
     FILE *f; 
 
+    if ( access ( "names_of_strings_list", F_OK ) != -1 ) {
+        i = remove ( "names_of_strings_list" );
+        i = 0;
+    };
+
     printf ( "get first %d random strings of file keywords:\n", count_of_names );
+    printf ( "string_count" );
 
     pointer = 0; 
     step = 0;
     full_rand_array ( string_count, random_array );
     while ( step < count_of_names ) {
-        if ( pointer == string_count ) {
+        pointer++;
+        if ( pointer == ( string_count - 1 ) ) {
             full_rand_array ( string_count, random_array );
             pointer = 0;
         }
         
         clear_string ( temp_string );
-        printf ( "at step %d in get_numbered_line_of_file send position %d;\n", pointer, random_array [ pointer ] );
+        printf ( "=====================================================\n" );
+        printf ( "at step %d ( pointer ) in get_numbered_line_of_file send position %d;\n", pointer, random_array [ pointer ] );
         get_numbered_line_of_file ( temp_string, random_array [ pointer ] );
         printf ( "after get_numbered_line_of_file string temp_string = '%s';\n", temp_string );
-        pointer++;
-        step++;
         
         if ( strlen ( concat_string ) + strlen ( temp_string ) < 150 ) {
             strcat ( concat_string, temp_string );
@@ -217,16 +224,12 @@ void full_list_of_names ( void ) {
             strcat ( concat_string, "\n" );
             f = fopen ( "names_of_strings_list", "a+" );
             fputs ( concat_string, f ); 
-            printf ( "in file names_of_strings_list added string = '%s';\n", concat_string );
+            printf ( "in file names_of_strings_list added string = '%s';\n\n", concat_string );
             fclose ( f );
             clear_string ( concat_string );
+            step++;
         }
     }
-
-
-
-
-
 }
 
 void get_numbered_line_of_file ( char line [ A_S ], int number ) {
@@ -244,7 +247,7 @@ void get_numbered_line_of_file ( char line [ A_S ], int number ) {
     temp [ strlen ( temp ) - 1 ] = ' ';
     printf ( "temp [ strlen ( temp ) = %d - 1 ] = '%c';\n",  strlen ( temp ) - 1, temp [ strlen ( temp ) - 1 ] );
     printf ( "after cycle position = %d; and getted string = %s;\n", i, temp );
-
+    strcat ( line, temp );
     fclose ( f );
 
 }
