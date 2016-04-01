@@ -12,7 +12,7 @@
 #define is_a(a,b) (a||b?a:b)
 #define is_int(a,b) ()
 
-#define swap(t,x,y) swap3((t)(z),(t)(x),(t)(y))
+#define swap(t,x,y) ((t)(z);swap3((t)(z),(t)(x),(t)(y)))
 #define swap2(t,x,y) printf("%f,%f.\n",(t)(x),(t)(y))
 #define swap3(z,x,y) (z=x,x=y,y=z)
 
