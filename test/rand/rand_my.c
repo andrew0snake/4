@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-//#define RAND_MAX 150
+//#define RAND_MAX 155
 #define A_S 10000
 //defining external values
 int string_count = 0;
